@@ -1,0 +1,65 @@
+{
+  "benchmark_context": "in-process FastAPI TestClient on local CPU with no external API calls",
+  "slo_targets": {
+    "evaluate_p95_ms": 1500,
+    "copilot_p95_ms": 1500,
+    "external_cost_usd_per_request": 0.0
+  },
+  "latency_ms": {
+    "role_create_p95": 6.46,
+    "candidate_upload_p95": 18.76,
+    "evaluate_p95": 4.81,
+    "copilot_p95": 4.41
+  },
+  "quality": {
+    "top1_eval_accuracy": 1.0,
+    "copilot_ranking_consistency": 1.0,
+    "candidate_count": 3,
+    "requirements_per_role": 8
+  },
+  "cost": {
+    "external_api_cost_usd_per_request": 0.0,
+    "hosting_note": "Excludes infrastructure hosting cost; local CPU benchmark only."
+  },
+  "ops_metrics_snapshot": {
+    "window_size": 44,
+    "error_rate": 0.0,
+    "avg_ms": 2.19,
+    "p50_ms": 1.7,
+    "p95_ms": 3.55,
+    "routes": [
+      {
+        "route": "POST /candidates/upload",
+        "requests": 1,
+        "errors": 0,
+        "avg_ms": 16.61,
+        "p50_ms": 16.61,
+        "p95_ms": 16.61
+      },
+      {
+        "route": "POST /copilot/query",
+        "requests": 21,
+        "errors": 0,
+        "avg_ms": 1.63,
+        "p50_ms": 1.59,
+        "p95_ms": 1.97
+      },
+      {
+        "route": "POST /roles/caa6395a98f6/evaluate",
+        "requests": 21,
+        "errors": 0,
+        "avg_ms": 1.99,
+        "p50_ms": 1.82,
+        "p95_ms": 2.39
+      },
+      {
+        "route": "POST /roles/text",
+        "requests": 1,
+        "errors": 0,
+        "avg_ms": 3.55,
+        "p50_ms": 3.55,
+        "p95_ms": 3.55
+      }
+    ]
+  }
+}
