@@ -4,6 +4,8 @@
 
 <br/>
 
+
+
 # 🧠 Talentra Copilot
 
 ### AI-Powered Recruiting Intelligence · Zero External API Cost · <5ms p95 Latency
@@ -440,3 +442,5 @@ The eval harness measures top-k retrieval accuracy and copilot ranking consisten
 *Talentra Copilot — because hiring decisions deserve explainability.*
 
 </div>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2b0a3d,50:7c3aed,100:c084fc&height=120&section=footer" width="100%"/>
