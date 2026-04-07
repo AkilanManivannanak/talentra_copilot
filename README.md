@@ -6,9 +6,9 @@
 
 
 
-# 🧠 Talentra Copilot
 
-### AI-Powered Recruiting Intelligence · Zero External API Cost · <5ms p95 Latency
+![Talentra Copilot Banner](https://capsule-render.vercel.app/api?type=waving&color=0:2b0a3d,50:7c3aed,100:c084fc&height=220&section=header&text=Talentra%20Copilot🧠&fontSize=58&fontColor=ffffff&fontAlignY=38&desc=AI-Powered%20Recruiting%20Intelligence%20-%20Zero%20External%20API%20Cost%20-%20Under%205ms%20p95%20Latency&descAlignY=60&descSize=20&animation=fadeIn)
+
 
 <br/>
 
