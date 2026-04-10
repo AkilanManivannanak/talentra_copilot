@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: talentra-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: render
+      - key: CHAT_MODEL
+        value: local-rule-based
+      - key: EMBEDDING_MODEL
+        value: local-lexical
+  - type: web
+    name: talentra-ui
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run frontend/streamlit_app.py --server.address 0.0.0.0 --server.port $PORT
+    envVars:
+      - key: APP_ENV
+        value: render
