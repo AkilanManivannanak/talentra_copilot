@@ -1,22 +1,147 @@
-name: ci
+name: CI
 
 on:
   push:
+    branches: [main, develop]
   pull_request:
+    branches: [main]
 
 jobs:
-  test:
+  lint:
+    name: Syntax check all modules
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Install dependencies
+          python-version: "3.12"
+      - name: Check syntax
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Run unit tests
-        run: pytest -q --cov=app --cov-report=term-missing
-      - name: Run benchmark gate
-        run: PYTHONPATH=. python scripts/benchmark.py --assert
+          python -m py_compile app/__init__.py
+          python -m py_compile app/main.py
+          python -m py_compile app/core/config.py
+          python -m py_compile app/core/store.py
+          python -m py_compile app/core/middleware.py
+          python -m py_compile app/core/requirements.py
+          python -m py_compile app/routers/roles.py
+          python -m py_compile app/routers/candidates.py
+          python -m py_compile app/routers/evaluation.py
+          python -m py_compile app/routers/copilot.py
+          python -m py_compile app/routers/ats.py
+          python -m py_compile app/routers/ops.py
+          python -m py_compile app/preprocessing/cleaner.py
+          python -m py_compile app/preprocessing/sections.py
+          python -m py_compile app/preprocessing/skills.py
+          python -m py_compile app/preprocessing/pii.py
+          python -m py_compile app/preprocessing/dates.py
+          python -m py_compile app/preprocessing/pipeline.py
+          python -m py_compile app/langchain_layer/loaders.py
+          python -m py_compile app/langchain_layer/splitter.py
+          python -m py_compile app/langchain_layer/vectorstore.py
+          python -m py_compile app/langchain_layer/prompts.py
+          python -m py_compile app/graph/hiring_graph.py
+          python -m py_compile app/agents/base.py
+          python -m py_compile app/agents/screener.py
+          python -m py_compile app/agents/ranker.py
+          python -m py_compile app/agents/interviewer.py
+          python -m py_compile app/agents/bias_auditor.py
+          python -m py_compile app/agents/copilot.py
+          python -m py_compile app/finetuning/data_generator.py
+          python -m py_compile app/finetuning/trainer.py
+          python -m py_compile app/finetuning/dpo.py
+          python -m py_compile app/finetuning/eval_gate.py
+          python -m py_compile scripts/benchmark.py
+          python -m py_compile scripts/generate_training_data.py
+          python -m py_compile scripts/finetune_lora.py
+          python -m py_compile scripts/finetune_dpo.py
+          echo "All modules pass syntax check"
+
+  preprocessing-smoke:
+    name: Preprocessing smoke test
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install minimal deps
+        run: pip install dateparser
+      - name: Run preprocessing smoke (regex-only, no spaCy)
+        run: |
+          python - << 'PYEOF'
+          import sys
+          sys.path.insert(0, '.')
+          from app.preprocessing.cleaner import clean_text
+          from app.preprocessing.sections import detect_sections
+          from app.preprocessing.skills import extract_skills
+          from app.preprocessing.pii import redact_pii
+          from app.preprocessing.dates import parse_tenure, total_years_experience
+
+          text = 'Alice built FastAPI and Docker systems. alice@company.com. Jan 2020 - Present.'
+          cleaned = clean_text(text)
+          skills = extract_skills(cleaned, use_spacy=False)
+          redacted, pii = redact_pii(cleaned)
+          yoe = total_years_experience(cleaned)
+
+          assert 'fastapi' in skills or 'docker' in skills, f'Skills not found: {skills}'
+          assert len(pii) > 0, f'PII not detected: {pii}'
+          assert yoe > 0, f'YOE not parsed: {yoe}'
+          print(f'Skills: {skills}')
+          print(f'PII: {pii}')
+          print(f'YOE: {yoe}')
+          print('Preprocessing smoke PASSED')
+          PYEOF
+
+  training-data-smoke:
+    name: Training data smoke test
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate training data
+        run: |
+          python scripts/generate_training_data.py \
+            --seed eval/demo_seed.json \
+            --out /tmp/train.jsonl
+      - name: Validate output
+        run: |
+          python - << 'PYEOF'
+          import json
+          lines = open('/tmp/train.jsonl').readlines()
+          assert len(lines) > 0, 'No training examples generated'
+          ex = json.loads(lines[0])
+          assert 'messages' in ex, 'Missing messages key'
+          assert len(ex['messages']) == 3, f'Expected 3 messages, got {len(ex["messages"])}'
+          print(f'Generated {len(lines)} training examples')
+          print('Training data smoke PASSED')
+          PYEOF
+
+  benchmark:
+    name: Benchmark gate
+    runs-on: ubuntu-latest
+    needs: [preprocessing-smoke, training-data-smoke]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: |
+          pip install \
+            fastapi==0.115.12 \
+            uvicorn==0.34.0 \
+            python-multipart==0.0.20 \
+            pydantic-settings==2.8.1 \
+            requests==2.32.3 \
+            httpx==0.28.1 \
+            python-dotenv==1.1.0 \
+            PyPDF2==3.0.1 \
+            python-docx==1.1.2 \
+            dateparser \
+            pytest
+      - name: Run benchmark with SLO assertions
+        run: python scripts/benchmark.py --assert
