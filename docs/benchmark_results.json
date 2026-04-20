@@ -6,10 +6,10 @@
     "external_cost_usd_per_request": 0.0
   },
   "latency_ms": {
-    "role_create_p95": 4.47,
-    "candidate_upload_p95": 6.55,
-    "evaluate_p95": 2.36,
-    "copilot_p95": 2.03
+    "role_create_p95": 7.14,
+    "candidate_upload_p95": 8.42,
+    "evaluate_p95": 3.1,
+    "copilot_p95": 2.97
   },
   "quality": {
     "top1_eval_accuracy": 1.0,

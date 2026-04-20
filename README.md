@@ -1,5 +1,5 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=200&section=header&text=Talentra%20Copilot%20%F0%9F%A7%A0&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=AI-Powered%20Recruiting%20Intelligence&descAlignY=58&descSize=18&animation=fadeIn" width="100%"/>
-          
+
 <br/>
 
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
