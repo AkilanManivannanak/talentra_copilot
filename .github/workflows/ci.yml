@@ -130,18 +130,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install deps
-        run: |
-          pip install \
-            fastapi==0.115.12 \
-            uvicorn==0.34.0 \
-            python-multipart==0.0.20 \
-            pydantic-settings==2.8.1 \
-            requests==2.32.3 \
-            httpx==0.28.1 \
-            python-dotenv==1.1.0 \
-            PyPDF2==3.0.1 \
-            python-docx==1.1.2 \
-            dateparser \
-            pytest
+        run: pip install -r requirements.txt
       - name: Run benchmark with SLO assertions
         run: python scripts/benchmark.py --assert
