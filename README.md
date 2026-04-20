@@ -58,11 +58,10 @@ All metrics benchmarked on MacBook M2 · local CPU · no external API calls · r
 | Error rate (benchmark suite) | 0% | **0%** | ✅ |
 
 ```
-One-Liner for interviewers:
-"Built multi-agent hiring intelligence with LangGraph + LangChain + spaCy
+Built multi-agent hiring intelligence with LangGraph + LangChain + spaCy
 → evaluate p95 4.81 ms · copilot p95 4.41 ms · cost $0.000/request · accuracy 1.0
-→ FastAPI + Streamlit + Docker + Render · CI with 5 gates
-→ 5 production bugs found, root-caused, fixed — all in the postmortem"
+→ FastAPI + Streamlit + Docker + Render · CI with 5 gates · Prometheus /metrics
+→ 5 production bugs found, root-caused, fixed — all in the postmortem
 ```
 
 ---
@@ -618,8 +617,6 @@ GET /metrics      → Prometheus scrape endpoint (machine-readable text format)
 | `GET /ops/metrics` | JSON | Human-readable latency dashboard | Recruiter ops page, Streamlit UI |
 | `GET /metrics` | Prometheus text | Machine-readable scrape target | Prometheus server, Grafana Cloud |
 
-The two endpoints serve different consumers and are not redundant. `/ops/metrics` is the application-level dashboard; `/metrics` is the infrastructure monitoring scrape endpoint.
-
 ### Cloud deploy (Render.com)
 
 ```yaml
@@ -659,17 +656,15 @@ uvicorn app.main:app --reload
 
 ---
 
-## 🗣 Interview-Ready Answers
-
-> *Practised for system design interviews — reproduced here for transparency.*
+## 🗣 System Design Q&A
 
 **"Design a RAG for 1M PDFs; latency < 1.5s — where do caching and rerankers live?"**
 > Semantic cache (cosine ≥ 0.92) sits in front of the LangGraph pipeline — cache HIT bypasses LLM entirely (~120ms). Reranker (BM25 term boost) sits between ChromaDB MMR retrieval and generation — precision↑ at low K, adds ~15ms p95. For 1M PDFs: distributed vectorstore (Weaviate/OpenSearch), async batch ingest, HNSW index. Talentra uses the same architecture pattern at portfolio scale.
 
-**"Deploy an LLM assistant with small→big model routing, cost guardrails, fail-open"**
+**"How does the system handle small→big model routing with cost guardrails?"**
 > ScreenerAgent = cheap rule-based model (0 cost). RankerAgent = local Phi-3-mini via LoRA adapter (0 API cost). CopilotAgent = Ollama llama3.1:8b for complex Q&A. Cost guardrail: token counter per request; switch to smaller model tier if daily budget exceeded. Fail-open: every agent has a rule-based fallback — LLM unavailable → rule-based answer, never a 500 error.
 
-**"Make it resilient to data drift — eval gates, rollbacks, shadow tests"**
+**"How is the system resilient to data drift?"**
 > Eval gate: `benchmark.py --assert` blocks fine-tuned model promotion if accuracy drops. Rollback: delete `models/active_model.json` → rule-based backend instantly. Shadow test: run fine-tuned and rule-based in parallel; compare `pct_score` distributions before cutover. Drift signal: RAGAS faithfulness logged per interaction — dashboard alert if rolling average drops below 0.70.
 
 ---
