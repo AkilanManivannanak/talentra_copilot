@@ -1,6 +1,6 @@
 <div align="center">
+![Talentra Copilot Banner](https://capsule-render.vercel.app/api?type=waving&color=0:2b0a3d,50:7c3aed,100:c084fc&height=220&section=header&text=Talentra%20Copilot🧠&fontSize=58&fontColor=ffffff&fontAlignY=38&desc=AI-Powered%20Recruiting%20Intelligence%20-%20Zero%20External%20API%20Cost%20-%20Under%205ms%20p95%20Latency&descAlignY=60&descSize=20&animation=fadeIn)
 
-![Talentra Copilot Banner](https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=230&section=header&text=Talentra%20Copilot%20🎯&fontSize=60&fontColor=ffffff&fontAlignY=38&desc=Multi-Agent%20Hiring%20Intelligence%20·%20Zero%20API%20Cost%20·%20p95%20%3C%205ms&descAlignY=60&descSize=20&animation=fadeIn)
 
 <br/>
 
@@ -8,9 +8,12 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![LangChain](https://img.shields.io/badge/LangChain-0.2+-1C3C3C?style=for-the-badge&logo=chainlink&logoColor=white)](https://langchain.com)
 [![LangGraph](https://img.shields.io/badge/LangGraph-0.1+-FF6B35?style=for-the-badge&logo=graphql&logoColor=white)](https://langchain-ai.github.io/langgraph)
+[![LoRA](https://img.shields.io/badge/LoRA-Fine--tuning-8A2BE2?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/docs/peft)
+[![DPO](https://img.shields.io/badge/DPO-Alignment-C084FC?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/docs/trl/dpo_trainer)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.45+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
 [![spaCy](https://img.shields.io/badge/spaCy-NER-09A3D5?style=for-the-badge&logo=spacy&logoColor=white)](https://spacy.io)
+[![Prometheus](https://img.shields.io/badge/Prometheus-Metrics-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)](https://prometheus.io)
 [![Render](https://img.shields.io/badge/Deploy-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
 [![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/AkilanManivannanak/talentra_copilot/actions)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
@@ -26,6 +29,8 @@
 <br/>
 
 > *Compound AI hiring intelligence — multi-agent orchestration, LangGraph routing, LangChain semantic retrieval, spaCy NER preprocessing, PII redaction, LoRA/DPO fine-tuning pipeline, and evidence-grounded recruiter Q&A. Built for hiring teams who deserve production-grade candidate intelligence without cloud API costs.*
+>
+> *Talentra leverages foundation model fine-tuning (LoRA/DPO on Mistral-7B/Phi-3-mini) for domain-adapted hiring intelligence — adapting large pre-trained language models to the recruitment domain via parameter-efficient fine-tuning.*
 
 <br/>
 
@@ -90,7 +95,7 @@ Resume Upload / Recruiter Query
                            ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  FastAPI serving layer                      │
-│   X-Request-ID · /ops/metrics · /health · CORS middleware   │
+│   X-Request-ID · /ops/metrics · /metrics · /health · CORS  │
 └──────┬────────────────┬──────────────────┬──────────────────┘
        │                │                  │
        ▼                ▼                  ▼
@@ -116,7 +121,8 @@ Resume Upload / Recruiter Query
 │  ScreenerAgent     → hard-filter on must-have requirements  │
 │  RankerAgent       → evidence-weighted 0–3 score per req    │
 │  InterviewerAgent  → tailored STAR + technical questions    │
-│  BiasAuditorAgent  → gender / prestige / recency audit      │
+│  BiasAuditorAgent  → responsible AI safety layer            │
+│                      gender / prestige / recency audit      │
 │  CopilotAgent      → evaluation-aware Q&A + evidence search │
 │                                                             │
 │  BaseAgent: _call_llm · _parse_json · _format_evidence      │
@@ -178,7 +184,8 @@ cp .env.example .env
 # 6. Start the API (Terminal 1)
 uvicorn app.main:app --reload
 # → http://localhost:8000
-# → http://localhost:8000/docs   ← Swagger UI with all 19 routes
+# → http://localhost:8000/docs      ← Swagger UI with all routes
+# → http://localhost:8000/metrics   ← Prometheus scrape endpoint
 
 # 7. Start the UI (Terminal 2)
 streamlit run frontend/streamlit_app.py
@@ -218,16 +225,17 @@ docker compose up --build
 | **NER** | spaCy `en_core_web_sm` | Local, fast, no API cost; 50-skill curated taxonomy; regex fallback |
 | **PII redaction** | Microsoft Presidio | Email, phone, SSN, URLs; regex fallback when Presidio not installed |
 | **Fine-tuning** | `peft` + `trl` (LoRA/DPO) | Runs on consumer GPU; 4-bit QLoRA via bitsandbytes on CUDA |
+| **Observability** | Prometheus + custom `/ops/metrics` | `/metrics` for infra scraping; `/ops/metrics` for human-readable latency dashboard |
 | **Storage** | JSON flat files | Zero infra; suitable for < 10k candidates; swap to Postgres in one line |
 | **Container** | Docker + Compose | One-command reproducible deploy; spaCy model baked into image |
 | **Cloud deploy** | Render.com (`render.yaml`) | Free tier; separate services for API + UI |
 
 **Key architectural decisions:**
 
-- **Local-first, $0 default** — zero OpenAI API cost; LLM is an optional plug-in. Every agent has a deterministic fallback.
-- **Lexical before dense** — IDF scoring is deterministic, fast, and debuggable. Upgrade path to Chroma semantic search is one config flag.
-- **Flat JSON over Postgres** — sufficient for portfolio/demo scale; avoids infra dependency. The `MetadataStore` interface swaps trivially.
-- **Graceful degradation at every layer** — spaCy absent → regex NER; Presidio absent → regex PII; Chroma absent → FAISS → lexical; LLM absent → rule-based agents.
+* **Local-first, $0 default** — zero OpenAI API cost; LLM is an optional plug-in. Every agent has a deterministic fallback.
+* **Lexical before dense** — IDF scoring is deterministic, fast, and debuggable. Upgrade path to Chroma semantic search is one config flag.
+* **Flat JSON over Postgres** — sufficient for portfolio/demo scale; avoids infra dependency. The `MetadataStore` interface swaps trivially.
+* **Graceful degradation at every layer** — spaCy absent → regex NER; Presidio absent → regex PII; Chroma absent → FAISS → lexical; LLM absent → rule-based agents.
 
 ---
 
@@ -266,6 +274,20 @@ docker compose up --build
 | `InterviewerAgent` | Role + candidate skills + top evidence | `[{type, skill_focus, question}]` | `INTERVIEW_QUESTION_PROMPT` | Curated STAR templates |
 | `BiasAuditorAgent` | Ranked candidates + raw texts | `{bias_flags, severity, recommendation}` | `BIAS_AUDIT_PROMPT` | Name/school/gap heuristics |
 | `CopilotAgent` | Question + eval results + vectorstore | Grounded answer string | `COPILOT_PROMPT` | Rule-based routing (comparison / evidence / generic) |
+
+### 🛡️ Responsible AI Safety Layer
+
+`BiasAuditorAgent` is Talentra's built-in responsible AI safety layer — automated bias detection for gender, prestige, and recency discrimination in hiring decisions. Every evaluation run triggers a bias audit across three dimensions:
+
+| Dimension | What it checks | Signal |
+|---|---|---|
+| **Gender bias** | Name-based gender inference correlated with score deltas | Candidate score penalised by inferred gender |
+| **Prestige bias** | FAANG/Ivy school names correlated with ranking uplift | Overweighting brand names over demonstrated skills |
+| **Recency bias** | Short tenure or employment gaps correlated with rejection | Penalising career breaks, not skill gaps |
+
+Output: `{bias_flags: [...], severity: low/medium/high, recommendation: str}` — surfaced to the recruiter before ATS stage promotion. Audits run deterministically with a rule-based fallback — no LLM required in the critical safety path.
+
+> *Safety in hiring AI is not a feature — it's a constraint. BiasAuditorAgent runs on every evaluation, not on request.*
 
 ### LangGraph workflow
 
@@ -318,9 +340,10 @@ Upload Request
 ┌──────────────────────────────────────────────────────┐
 │            Observability layer                       │
 │  X-Request-ID on every response                      │
-│  GET /ops/metrics → p50/p95/p99 per route            │
-│  GET /ops/build   → env, model, started_at           │
-│  GET /health      → status check for load balancers  │
+│  GET /ops/metrics  → p50/p95/p99 per route (custom)  │
+│  GET /metrics      → Prometheus scrape endpoint      │
+│  GET /ops/build    → env, model, started_at          │
+│  GET /health       → status check for load balancers │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -367,6 +390,7 @@ raw text
 ```
 
 **Real output on an actual resume:**
+
 ```
 Skills:   ['docker', 'fastapi', 'langchain', 'machine learning', 'python', 'rag']
 PII:      ['PERSON', 'EMAIL_ADDRESS', 'DATE_TIME', 'URL']
@@ -442,10 +466,10 @@ make eval-gate
 ```
 
 **MLOps awareness:**
-- Eval-gate-before-promote — fine-tuned model can only become active if it passes all SLO assertions
-- Rollback path — delete `models/active_model.json` to revert to rule-based instantly
-- Shadow testing — run fine-tuned and rule-based in parallel; compare outputs before cutover
-- Drift detection — RAGAS scores logged per interaction for offline quality drift monitoring
+* Eval-gate-before-promote — fine-tuned model can only become active if it passes all SLO assertions
+* Rollback path — delete `models/active_model.json` to revert to rule-based instantly
+* Shadow testing — run fine-tuned and rule-based in parallel; compare outputs before cutover
+* Drift detection — RAGAS scores logged per interaction for offline quality drift monitoring
 
 ---
 
@@ -468,7 +492,7 @@ make eval-gate
 ```
 talentra_copilot/
 ├── app/
-│   ├── main.py                     # FastAPI entry point — 19 routes, CORS, middleware
+│   ├── main.py                     # FastAPI entry point — all routes, CORS, Prometheus, middleware
 │   ├── __init__.py
 │   ├── core/
 │   │   ├── config.py               # Pydantic Settings — all config from .env, @lru_cache
@@ -501,7 +525,8 @@ talentra_copilot/
 │   │   ├── screener.py             # ScreenerAgent — must-have hard filter
 │   │   ├── ranker.py               # RankerAgent — 0–3 evidence score per requirement
 │   │   ├── interviewer.py          # InterviewerAgent — STAR + technical questions
-│   │   ├── bias_auditor.py         # BiasAuditorAgent — gender/prestige/recency audit
+│   │   ├── bias_auditor.py         # BiasAuditorAgent — responsible AI safety layer
+│   │   │                           #   gender / prestige / recency discrimination audit
 │   │   └── copilot.py              # CopilotAgent — eval-aware Q&A + evidence search
 │   └── finetuning/
 │       ├── data_generator.py       # SFT JSONL from fixtures + ATS feedback
@@ -578,10 +603,22 @@ Every request → X-Request-ID header
              → X-Response-Time-Ms header
              → recorded in RequestMetrics (in-memory p50/p95/p99 per route)
 
-GET /ops/metrics  → live latency summary per route
+GET /ops/metrics  → custom in-memory latency summary per route (human-readable JSON)
 GET /ops/build    → app_env, python version, model backend, started_at
 GET /health       → {"status": "ok"}  ← used by Render load balancer
+GET /metrics      → Prometheus scrape endpoint (machine-readable text format)
+                    exposes: http_requests_total · http_request_duration_seconds
+                             http_requests_in_progress · labelled by route/method/status
 ```
+
+**Dual observability design — intentional:**
+
+| Endpoint | Format | Purpose | Consumer |
+|---|---|---|---|
+| `GET /ops/metrics` | JSON | Human-readable latency dashboard | Recruiter ops page, Streamlit UI |
+| `GET /metrics` | Prometheus text | Machine-readable scrape target | Prometheus server, Grafana Cloud |
+
+The two endpoints serve different consumers and are not redundant. `/ops/metrics` is the application-level dashboard; `/metrics` is the infrastructure monitoring scrape endpoint.
 
 ### Cloud deploy (Render.com)
 
@@ -597,7 +634,7 @@ talentra-ui:   streamlit run frontend/streamlit_app.py
 # Revert fine-tuned model → rule-based instantly
 rm models/active_model.json
 
-# Wipe vectorstore and re-ingest (ChromaDB equivalent of clear_existing=True)
+# Wipe vectorstore and re-ingest
 rm -rf data/vectorstore/
 uvicorn app.main:app --reload
 # → upload resumes again; fresh index built
@@ -610,7 +647,7 @@ uvicorn app.main:app --reload
 1. **Create Role** → paste any job description → requirements auto-extracted from JD text
 2. **Upload Resumes** → PDF / DOCX / TXT → preprocessing pipeline fires automatically:
    - skills detected, PII redacted, sections labelled, tenure parsed
-3. **Evaluate** → ScreenerAgent drops must-have failures → RankerAgent scores 0–3 per requirement → BiasAuditorAgent checks gender/prestige/recency patterns
+3. **Evaluate** → ScreenerAgent drops must-have failures → RankerAgent scores 0–3 per requirement → BiasAuditorAgent runs responsible AI safety audit (gender/prestige/recency)
 4. **Copilot Q&A** → ask in plain English:
    - *"Who is the strongest candidate for this role?"*
    - *"Why is the top candidate ranked first?"*
@@ -618,7 +655,7 @@ uvicorn app.main:app --reload
    - *"Who shows the strongest evidence for machine learning?"*
 5. **Interview Questions** → generate tailored STAR + technical questions for any shortlisted candidate
 6. **ATS Workflow** → move candidates: `new → screening → shortlisted → interview → offer → hired/rejected` · add recruiter notes
-7. **Ops Dashboard** → real-time p50/p95/p99 latency per route
+7. **Ops Dashboard** → real-time p50/p95/p99 latency per route + Prometheus metrics at `/metrics`
 
 ---
 
@@ -643,7 +680,7 @@ uvicorn app.main:app --reload
 
 **© 2026 Akilan Manivannan — All Rights Reserved**
 
-*Talentra Copilot · LangGraph · LangChain · spaCy · Presidio · FastAPI · Streamlit · Docker · Render*
+*Talentra Copilot · LangGraph · LangChain · spaCy · Presidio · FastAPI · Streamlit · Docker · Render · Prometheus*
 
 [![GitHub](https://img.shields.io/badge/GitHub-AkilanManivannanak-181717?style=flat-square&logo=github)](https://github.com/AkilanManivannanak)
 

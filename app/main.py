@@ -5,6 +5,9 @@ from typing import AsyncIterator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST, REGISTRY
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -28,6 +31,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(title="Talentra Copilot API", lifespan=lifespan)
 
+# Instrument BEFORE routes — middleware hook registers here
+Instrumentator(
+    should_group_status_codes=False,
+    should_ignore_untemplated=True,
+    should_instrument_requests_inprogress=True,
+    excluded_handlers=["/health", "/docs", "/openapi.json", "/redoc"],
+).instrument(app)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -48,3 +59,12 @@ app.include_router(ops.router)
 @app.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     return HealthResponse(status="ok")
+
+
+# Manually register /metrics route — bypasses expose() timing issues entirely
+@app.get("/metrics", include_in_schema=False)
+async def metrics() -> PlainTextResponse:
+    return PlainTextResponse(
+        generate_latest(REGISTRY),
+        media_type=CONTENT_TYPE_LATEST,
+    )
