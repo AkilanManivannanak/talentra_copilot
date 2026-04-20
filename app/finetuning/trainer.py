@@ -137,11 +137,9 @@ class LoRATrainer:
 
         self._trainer = SFTTrainer(
             model=self._model,
-            tokenizer=self._tokenizer,
             train_dataset=dataset["train"],
             eval_dataset=dataset.get("validation"),
             args=args,
-            max_seq_length=2048,
         )
 
         logger.info("Starting LoRA fine-tuning...")
