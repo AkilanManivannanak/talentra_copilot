@@ -10,5 +10,4 @@ python-docx==1.1.2
 python-dotenv==1.1.0
 pytest==8.3.5
 pytest-cov==6.0.0
-
-# Observability — Prometheus metrics endpoint (GET /metrics)
+prometheus-fastapi-instrumentator==6.1.0
