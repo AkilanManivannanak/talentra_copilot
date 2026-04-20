@@ -88,13 +88,13 @@ Resume Upload / Recruiter Query
           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                      Streamlit UI                           │
-│      role · upload · evaluate · copilot · ATS · ops        │
+│      role · upload · evaluate · copilot · ATS · ops         │
 └──────────────────────────┬──────────────────────────────────┘
                            │  HTTP
                            ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                  FastAPI serving layer                      │
-│   X-Request-ID · /ops/metrics · /metrics · /health · CORS  │
+│   X-Request-ID · /ops/metrics · /metrics · /health · CORS   │
 └──────┬────────────────┬──────────────────┬──────────────────┘
        │                │                  │
        ▼                ▼                  ▼
@@ -111,9 +111,9 @@ Resume Upload / Recruiter Query
 │ spaCy NER    │ │ FAISS /     │  │  ats_update_node ◀── │
 │ Presidio     │ │ lexical)    │  │  human-in-the-loop   │
 └──────┬───────┘ └──────┬──────┘  └──────────┬───────────┘
-       └────────────────┘                     │
-                 │                            │
-                 ▼                            ▼
+       └────────────────┘                    │
+                 │                           │
+                 ▼                           ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                   ④ Multi-Agent System                      │
 │                                                             │
@@ -125,7 +125,7 @@ Resume Upload / Recruiter Query
 │  CopilotAgent      → evaluation-aware Q&A + evidence search │
 │                                                             │
 │  BaseAgent: _call_llm · _parse_json · _format_evidence      │
-│  All agents degrade gracefully — rule-based fallback always  │
+│ All agents degrade gracefully — rule-based fallback always  │
 └──────────────────────────┬──────────────────────────────────┘
                            │
                            ▼
@@ -134,8 +134,8 @@ Resume Upload / Recruiter Query
 │                                                             │
 │  data_generator → SFT JSONL (fixtures + ATS feedback)       │
 │  LoRATrainer    → LoRA/QLoRA · Mistral-7B / Phi-3-mini      │
-│  DPOTrainer     → preference pairs from recruiter decisions  │
-│  eval_gate      → benchmark.py --assert before promotion     │
+│ DPOTrainer     → preference pairs from recruiter decisions  │
+│ eval_gate      → benchmark.py --assert before promotion     │
 └──────────────────────────┬──────────────────────────────────┘
                            │
                            ▼
