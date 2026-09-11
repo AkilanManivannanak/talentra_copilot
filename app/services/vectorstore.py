@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
+import tempfile
+import threading
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -35,6 +38,7 @@ class VectorStoreService:
         self._version = 0
         self._search_cache: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
         self._cache_size = max(32, cache_size)
+        self._write_lock = threading.Lock()
         self._path.parent.mkdir(parents=True, exist_ok=True)
         self._load()
 
@@ -69,9 +73,19 @@ class VectorStoreService:
         self._invalidate_cache()
 
     def _save(self) -> None:
+        """Atomic: write to a sibling temp file then rename, so a crash mid-write
+        cannot leave a truncated index behind."""
         file_path = self._storage_file
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_path.write_text(json.dumps(self._records, indent=2), encoding="utf-8")
+        handle, tmp_name = tempfile.mkstemp(dir=str(file_path.parent), suffix=".tmp")
+        try:
+            with os.fdopen(handle, "w", encoding="utf-8") as stream:
+                json.dump(self._records, stream)
+            os.replace(tmp_name, file_path)
+        except Exception:
+            if Path(tmp_name).exists():
+                os.unlink(tmp_name)
+            raise
         self._version += 1
         self._invalidate_cache()
 
@@ -183,7 +197,7 @@ class VectorStoreService:
         if normalised_query and len(normalised_query.split()) >= 2 and normalised_query in content_lower:
             phrase_bonus += 0.18
 
-        bigrams = list(zip(query_tokens, query_tokens[1:]))
+        bigrams = list(zip(query_tokens, query_tokens[1:], strict=False))
         if bigrams:
             joined_tokens = " ".join(record_tokens)
             bigram_hits = sum(1 for first, second in bigrams if f"{first} {second}" in joined_tokens)
@@ -236,9 +250,30 @@ class VectorStoreService:
             pending_records.append({"content": chunk, "metadata": metadata, "tokens": tokens})
         if not pending_records:
             raise ValueError("Document produced only low-signal or contact-only chunks.")
-        self._records.extend(pending_records)
-        self._save()
+        with self._write_lock:
+            self._records.extend(pending_records)
+            self._save()
         return len(pending_records)
+
+    def records_for_document(self, document_id: str) -> list[dict[str, Any]]:
+        """Chunks that actually survived low-signal filtering, for mirroring into the dense index."""
+        return [
+            {"content": record["content"], "metadata": record["metadata"]}
+            for record in self._records
+            if record.get("metadata", {}).get("document_id") == document_id
+        ]
+
+    def text_for_entity(self, entity_id: str) -> str:
+        """Reassemble an entity's indexed text from its chunks (used by the bias audit)."""
+        return "\n".join(
+            record["content"]
+            for record in self._records
+            if record.get("metadata", {}).get("entity_id") == entity_id
+        )
+
+    def make_snippet(self, content: str, query: str) -> str:
+        """Public wrapper so the hybrid retriever can build snippets for dense-only hits."""
+        return self._make_snippet(content, self._tokenise(query))
 
     def search(self, *, query: str, k: int = 5, filters: dict[str, str] | None = None, fetch_k: int = 30) -> list[dict[str, Any]]:
         query_tokens = self._tokenise(query)

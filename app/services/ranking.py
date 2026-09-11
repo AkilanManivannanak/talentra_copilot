@@ -24,6 +24,24 @@ class RankingService:
         self._summary = summary_service
         self._cache: dict[tuple, EvaluateRoleResponse] = {}
 
+    def _retrieve_grouped(self, query: str, per_entity_k: int) -> dict[str, list]:
+        """Prefer the grouped corpus-wide search; fall back for test doubles that only
+        implement the simple `search` contract."""
+        grouped_search = getattr(self._vectorstore, "search_grouped", None)
+        if callable(grouped_search):
+            return grouped_search(
+                query=query, per_entity_k=per_entity_k, filters={"entity_type": "candidate"}
+            )
+        hits = self._vectorstore.search(
+            query=query, k=200, filters={"entity_type": "candidate"}, fetch_k=200
+        )
+        grouped: dict[str, list] = {}
+        for hit in hits:
+            entity_id = hit.get("metadata", {}).get("entity_id")
+            if entity_id is not None and len(grouped.setdefault(entity_id, [])) < per_entity_k:
+                grouped[entity_id].append(hit)
+        return grouped
+
     def evaluate_role(
         self,
         *,
@@ -48,15 +66,24 @@ class RankingService:
             wanted = set(candidate_ids)
             candidates = [candidate for candidate in candidates if candidate.id in wanted]
 
+        # One corpus-wide retrieval per requirement, grouped by candidate afterwards.
+        # Previously this ran one filtered search per (candidate, requirement) pair, which
+        # made rank fusion degenerate (a one-document pool ranks everything first) and cost
+        # N_candidates x N_requirements searches instead of N_requirements.
+        wanted_ids = {candidate.id for candidate in candidates}
+        grouped_by_requirement: dict[str, dict[str, list]] = {}
+        for requirement in role.requirements:
+            grouped = self._retrieve_grouped(requirement.text, top_k_per_requirement)
+            grouped_by_requirement[requirement.id or requirement.text] = {
+                entity_id: hits for entity_id, hits in grouped.items() if entity_id in wanted_ids
+            }
+
         evaluations: list[CandidateEvaluation] = []
         for candidate in candidates:
             assessments: list[RequirementAssessment] = []
             for requirement in role.requirements:
-                hits = self._vectorstore.search(
-                    query=requirement.text,
-                    k=top_k_per_requirement,
-                    filters={"entity_type": "candidate", "entity_id": candidate.id},
-                )[:top_k_per_requirement]
+                key = requirement.id or requirement.text
+                hits = grouped_by_requirement[key].get(candidate.id, [])[:top_k_per_requirement]
                 evidence = [
                     Evidence(
                         document_id=item["metadata"]["document_id"],
@@ -65,6 +92,8 @@ class RankingService:
                         entity_name=item["metadata"]["entity_name"],
                         snippet=item.get("snippet") or item["content"][:320],
                         score=item["score"],
+                        chunk_id=item["metadata"].get("chunk_id", ""),
+                        provenance=item.get("provenance"),
                     )
                     for item in hits
                 ]
