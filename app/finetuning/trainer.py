@@ -6,7 +6,7 @@ Falls back gracefully when GPU / transformers are unavailable.
 """
 from __future__ import annotations
 
-import json
+import importlib.util
 import logging
 from pathlib import Path
 from typing import Any
@@ -69,12 +69,17 @@ class LoRATrainer:
         self._tokenizer = None
 
     def _check_deps(self) -> bool:
-        try:
-            import transformers, peft, trl, datasets  # noqa: F401
-            return True
-        except ImportError as e:
-            logger.warning(f"Fine-tuning deps not available: {e}. Install: pip install transformers peft trl datasets bitsandbytes")
+        """Availability is a package question, so ask the import system rather than
+        importing the packages themselves — importing transformers costs seconds."""
+        missing = [name for name in ("transformers", "peft", "trl", "datasets") if importlib.util.find_spec(name) is None]
+        if missing:
+            logger.warning(
+                "Fine-tuning dependencies not available: %s. Install with: "
+                "pip install -r requirements-ml.txt",
+                ", ".join(missing),
+            )
             return False
+        return True
 
     def train(self, train_data_path: str | Path, eval_data_path: str | Path | None = None) -> bool:
         """
@@ -85,10 +90,10 @@ class LoRATrainer:
             return False
 
         import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments
-        from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-        from trl import SFTTrainer
         from datasets import load_dataset
+        from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+        from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments
+        from trl import SFTTrainer
 
         logger.info(f"Loading base model: {self.base_model}")
 
@@ -162,8 +167,8 @@ class LoRATrainer:
         """Load a saved LoRA adapter for inference."""
         if not self._check_deps():
             return None
-        from transformers import AutoModelForCausalLM, AutoTokenizer
         from peft import PeftModel
+        from transformers import AutoModelForCausalLM, AutoTokenizer
         tokenizer = AutoTokenizer.from_pretrained(str(adapter_path))
         base = AutoModelForCausalLM.from_pretrained(self.base_model, trust_remote_code=True)
         model = PeftModel.from_pretrained(base, str(adapter_path))
