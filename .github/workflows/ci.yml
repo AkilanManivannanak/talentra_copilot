@@ -6,130 +6,116 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  PYTHON_VERSION: "3.12"
+
 jobs:
   lint:
-    name: Syntax check all modules
+    name: Lint (ruff)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Check syntax
-        run: |
-          python -m py_compile app/__init__.py
-          python -m py_compile app/main.py
-          python -m py_compile app/core/config.py
-          python -m py_compile app/core/store.py
-          python -m py_compile app/core/middleware.py
-          python -m py_compile app/core/requirements.py
-          python -m py_compile app/routers/roles.py
-          python -m py_compile app/routers/candidates.py
-          python -m py_compile app/routers/evaluation.py
-          python -m py_compile app/routers/copilot.py
-          python -m py_compile app/routers/ats.py
-          python -m py_compile app/routers/ops.py
-          python -m py_compile app/preprocessing/cleaner.py
-          python -m py_compile app/preprocessing/sections.py
-          python -m py_compile app/preprocessing/skills.py
-          python -m py_compile app/preprocessing/pii.py
-          python -m py_compile app/preprocessing/dates.py
-          python -m py_compile app/preprocessing/pipeline.py
-          python -m py_compile app/langchain_layer/loaders.py
-          python -m py_compile app/langchain_layer/splitter.py
-          python -m py_compile app/langchain_layer/vectorstore.py
-          python -m py_compile app/langchain_layer/prompts.py
-          python -m py_compile app/graph/hiring_graph.py
-          python -m py_compile app/agents/base.py
-          python -m py_compile app/agents/screener.py
-          python -m py_compile app/agents/ranker.py
-          python -m py_compile app/agents/interviewer.py
-          python -m py_compile app/agents/bias_auditor.py
-          python -m py_compile app/agents/copilot.py
-          python -m py_compile app/finetuning/data_generator.py
-          python -m py_compile app/finetuning/trainer.py
-          python -m py_compile app/finetuning/dpo.py
-          python -m py_compile app/finetuning/eval_gate.py
-          python -m py_compile scripts/benchmark.py
-          python -m py_compile scripts/generate_training_data.py
-          python -m py_compile scripts/finetune_lora.py
-          python -m py_compile scripts/finetune_dpo.py
-          echo "All modules pass syntax check"
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install ruff==0.8.6
+      # Replaces the previous "lint" job, which was a hand-maintained list of
+      # `python -m py_compile` calls. That checked syntax, not lint, and its list named
+      # four modules that no longer execute while omitting app/services/ entirely — the
+      # package where the running code actually lives. F401 alone would have surfaced most
+      # of the dead-code findings that prompted this rewrite.
+      - run: ruff check app eval scripts tests
+      - run: ruff format --check app eval scripts tests
 
-  preprocessing-smoke:
-    name: Preprocessing smoke test
+  test:
+    name: Tests
     runs-on: ubuntu-latest
     needs: lint
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install minimal deps
-        run: pip install dateparser
-      - name: Run preprocessing smoke (regex-only, no spaCy)
-        run: |
-          python - << 'PYEOF'
-          import sys
-          sys.path.insert(0, '.')
-          from app.preprocessing.cleaner import clean_text
-          from app.preprocessing.sections import detect_sections
-          from app.preprocessing.skills import extract_skills
-          from app.preprocessing.pii import redact_pii
-          from app.preprocessing.dates import parse_tenure, total_years_experience
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m spacy download en_core_web_sm
+      # pytest was removed from CI in commit 9a5d2b4 ("robust CI - remove pytest
+      # dependency"). The suite has been red on main ever since, which is why a broken
+      # /ops/metrics shipped with a passing build badge. It is the first gate now.
+      - run: pytest -q --cov=app --cov-report=term-missing
+      - name: Fail if coverage regressed below floor
+        run: pytest -q --cov=app --cov-fail-under=55
 
-          text = 'Alice built FastAPI and Docker systems. alice@company.com. Jan 2020 - Present.'
-          cleaned = clean_text(text)
-          skills = extract_skills(cleaned, use_spacy=False)
-          redacted, pii = redact_pii(cleaned)
-          yoe = total_years_experience(cleaned)
-
-          assert 'fastapi' in skills or 'docker' in skills, f'Skills not found: {skills}'
-          assert len(pii) > 0, f'PII not detected: {pii}'
-          assert yoe > 0, f'YOE not parsed: {yoe}'
-          print(f'Skills: {skills}')
-          print(f'PII: {pii}')
-          print(f'YOE: {yoe}')
-          print('Preprocessing smoke PASSED')
-          PYEOF
-
-  training-data-smoke:
-    name: Training data smoke test
+  retrieval-eval:
+    name: Retrieval quality gate
     runs-on: ubuntu-latest
-    needs: lint
+    needs: test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Generate training data
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m spacy download en_core_web_sm
+      - name: Rebuild the label set and check it is committed in sync
         run: |
-          python scripts/generate_training_data.py \
-            --seed eval/demo_seed.json \
-            --out /tmp/train.jsonl
-      - name: Validate output
+          python eval/build_labels.py
+          git diff --exit-code eval/labels.json \
+            || (echo "eval/labels.json is out of sync with build_labels.py" && exit 1)
+      - name: Evaluate retrieval against graded judgements
+        run: python eval/harness.py --mode hybrid --k 5
+      - name: Assert nDCG has not regressed
         run: |
-          python - << 'PYEOF'
-          import json
-          lines = open('/tmp/train.jsonl').readlines()
-          assert len(lines) > 0, 'No training examples generated'
-          ex = json.loads(lines[0])
-          assert 'messages' in ex, 'Missing messages key'
-          assert len(ex['messages']) == 3, f'Expected 3 messages, got {len(ex["messages"])}'
-          print(f'Generated {len(lines)} training examples')
-          print('Training data smoke PASSED')
-          PYEOF
+          python - <<'PY'
+          import json, sys
+          # Floor, not a target. Set below the measured value with headroom so ordinary
+          # variation does not fail the build, while a real regression does.
+          FLOOR = 0.70
+          results = json.load(open("docs/eval_results.json"))
+          ndcg = results["configurations"][0]["metrics"]["ndcg@5"]
+          print(f"nDCG@5 = {ndcg} (floor {FLOOR})")
+          sys.exit(0 if ndcg >= FLOOR else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: docs/eval_results.json
 
   benchmark:
-    name: Benchmark gate
+    name: Latency regression gate
     runs-on: ubuntu-latest
-    needs: [preprocessing-smoke, training-data-smoke]
+    needs: test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Install deps
-        run: pip install -r requirements.txt
-      - name: Run benchmark with SLO assertions
-        run: python scripts/benchmark.py --assert
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m spacy download en_core_web_sm
+      # Thresholds are deliberately loose: this catches order-of-magnitude regressions
+      # (a cache removed, an accidental O(n^2), a model loaded per request), not laptop-
+      # specific numbers. Cold and warm are measured separately.
+      - run: python scripts/benchmark.py --assert --iterations 100
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: docs/benchmark_results.json
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t talentra-copilot:ci .
+      - name: Smoke the built image
+        run: |
+          docker run -d --name talentra -p 8000:8000 talentra-copilot:ci
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:8000/health && break || sleep 2
+          done
+          curl -fsS http://localhost:8000/ops/build | tee /dev/stderr | grep -q '"langgraph_available": *true'
+          docker rm -f talentra

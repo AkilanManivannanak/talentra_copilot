@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+exclude = [".venv", "data", "models"]
+
+[tool.ruff.lint]
+# E,F = pyflakes/pycodestyle; I = import sorting; B = bugbear; UP = pyupgrade.
+# F401 (unused import) is the rule that would have surfaced most of the dead-code
+# findings that prompted this rewrite, so it is not suppressed anywhere.
+select = ["E", "F", "I", "B", "UP", "C4"]
+ignore = ["E501", "B008"]  # line length handled by formatter; B008 is FastAPI's Depends idiom
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

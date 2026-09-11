@@ -9,7 +9,7 @@ build/
 .env
 data/vectorstore/
 data/finetune/
-models/
+/models/
 .DS_Store
 __MACOSX/
 .vscode/
@@ -17,3 +17,7 @@ __MACOSX/
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Local virtualenv used for verification
+.venv/
+docs/eval_results.json.tmp

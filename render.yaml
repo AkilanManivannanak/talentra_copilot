@@ -2,16 +2,29 @@ services:
   - type: web
     name: talentra-api
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python -m spacy download en_core_web_sm
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: APP_ENV
         value: render
-      - key: CHAT_MODEL
-        value: local-rule-based
+      - key: LOG_JSON
+        value: "true"
+      # Hybrid retrieval via the LSA backend: no model download at boot, so cold starts
+      # stay bounded by the spaCy/Presidio warm-up rather than a network fetch.
+      - key: RETRIEVAL_MODE
+        value: hybrid
       - key: EMBEDDING_MODEL
-        value: local-lexical
+        value: lsa
+      - key: RERANK_ENABLED
+        value: "false"
+      - key: PREWARM_MODELS
+        value: "true"
+      - key: AGENTIC_ENABLED
+        value: "true"
+      - key: AGENTIC_INTERRUPT_BEFORE_ATS
+        value: "true"
+
   - type: web
     name: talentra-ui
     env: python
@@ -20,3 +33,5 @@ services:
     envVars:
       - key: APP_ENV
         value: render
+      - key: BACKEND_URL
+        sync: false

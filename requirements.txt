@@ -1,13 +1,38 @@
+# Serving stack
 fastapi==0.115.12
 uvicorn==0.34.0
 python-multipart==0.0.20
 pydantic-settings==2.8.1
+python-dotenv==1.1.0
+
+# Document parsing
+pypdf==5.1.0
+python-docx==1.1.2
+
+# Retrieval. scikit-learn powers the LSA dense backend, so hybrid retrieval works out of
+# the box with no model download; numpy is its transitive dependency, used for cosine.
+scikit-learn==1.6.1
+numpy==2.2.1
+
+# Agent orchestration. langgraph is a hard dependency now that the agentic route is
+# registered — the sequential fallback exists for constrained environments, not as the
+# expected configuration.
+langgraph==0.2.60
+langchain-core==0.3.29
+
+# Preprocessing. spaCy needs its model: python -m spacy download en_core_web_sm
+spacy==3.8.2
+presidio-analyzer==2.2.355
+
+# Frontend + client
+streamlit==1.45.1
 requests==2.32.3
 httpx==0.28.1
-streamlit==1.45.1
-PyPDF2==3.0.1
-python-docx==1.1.2
-python-dotenv==1.1.0
+
+# Observability
+prometheus-fastapi-instrumentator==6.1.0
+
+# Test + lint
 pytest==8.3.5
 pytest-cov==6.0.0
-prometheus-fastapi-instrumentator==6.1.0
+ruff==0.8.6

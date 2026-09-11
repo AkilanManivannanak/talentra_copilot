@@ -1,8 +1,7 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from app.models.schemas import (
     CandidateEvaluation,
-    CandidateRecord,
     EvaluateRoleResponse,
     Evidence,
     Requirement,
@@ -24,7 +23,7 @@ class FakeMetadata:
                 Requirement(id="r2", text="Machine learning", weight=1.0),
             ],
             document_ids=[],
-            created_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
         )
 
     def get_role(self, role_id: str):
