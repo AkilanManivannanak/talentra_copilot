@@ -19,8 +19,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.finetuning.trainer import LoRATrainer
 from app.finetuning.eval_gate import run_eval_gate
+from app.finetuning.trainer import LoRATrainer
 
 
 def main():

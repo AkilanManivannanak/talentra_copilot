@@ -1,0 +1,1032 @@
+{
+  "eval_set": {
+    "method": "Synthetic resumes authored from structured evidence profiles; graded relevance (0-3) derived from the profile, not from the prose. See eval/build_labels.py.",
+    "limitation": "Synthetic prose is cleaner and more consistent than real resumes, so absolute scores are optimistic. Use this set for relative comparison between retrieval configurations, not as an estimate of real-world accuracy.",
+    "roles": 3,
+    "candidates": 30,
+    "requirements": 15,
+    "judgements": 180
+  },
+  "configurations": [
+    {
+      "config": {
+        "requested_mode": "lexical",
+        "effective_mode": "lexical",
+        "rerank_requested": false,
+        "rerank_active": false,
+        "embedding_model": null,
+        "k": 5
+      },
+      "corpus": {
+        "candidates_indexed": 30,
+        "queries": 15,
+        "judgements": 180,
+        "index_seconds": 0.026
+      },
+      "metrics": {
+        "ndcg@5": 0.761,
+        "precision@3": 0.9111,
+        "recall@5": 0.4538,
+        "mrr": 0.9333,
+        "kendall_tau": 0.2494
+      },
+      "retrieval_latency_ms": {
+        "mean": 3.065,
+        "p95": 3.434,
+        "samples": 15
+      },
+      "per_query": [
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_py",
+          "requirement": "Must have 3+ years of professional Python experience",
+          "ndcg@5": 0.7317,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": -0.0416,
+          "top_3": [
+            "Priya Raman",
+            "Ayesha Siddiqui",
+            "Hana Kobayashi"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_rag",
+          "requirement": "Required: experience designing and shipping retrieval-augmented generation systems in production",
+          "ndcg@5": 0.7853,
+          "precision@3": 1.0,
+          "recall@5": 0.4444,
+          "mrr": 1.0,
+          "kendall_tau": 0.0946,
+          "top_3": [
+            "Priya Raman",
+            "Omar Haddad",
+            "Sofia Marchetti"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_serve",
+          "requirement": "Strong knowledge of building and deploying HTTP services with FastAPI and Docker on a cloud platform",
+          "ndcg@5": 0.7393,
+          "precision@3": 1.0,
+          "recall@5": 0.5556,
+          "mrr": 1.0,
+          "kendall_tau": 0.2951,
+          "top_3": [
+            "Fatima Zahra",
+            "Sofia Marchetti",
+            "Camille Dubois"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_eval",
+          "requirement": "Experience designing offline evaluation pipelines and measuring retrieval quality with ranking metrics",
+          "ndcg@5": 0.9098,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.668,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Priya Raman",
+            "Fatima Zahra"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_agent",
+          "requirement": "Nice to have: exposure to agent orchestration frameworks and multi-step LLM workflows",
+          "ndcg@5": 0.9098,
+          "precision@3": 1.0,
+          "recall@5": 0.625,
+          "mrr": 1.0,
+          "kendall_tau": 0.362,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_py",
+          "requirement": "Must have strong Python engineering skills in a production codebase",
+          "ndcg@5": 0.663,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.1032,
+          "top_3": [
+            "Elena Petrova",
+            "Marcus Bell",
+            "Daniel Okafor"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_pipe",
+          "requirement": "Required: experience operating batch or streaming data pipelines at scale",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4167,
+          "mrr": 1.0,
+          "kendall_tau": 0.527,
+          "top_3": [
+            "Marcus Bell",
+            "Ayesha Siddiqui",
+            "Peter Svensson"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_serve",
+          "requirement": "Experience owning model serving infrastructure, containers, and deployment",
+          "ndcg@5": 0.925,
+          "precision@3": 1.0,
+          "recall@5": 0.4545,
+          "mrr": 1.0,
+          "kendall_tau": 0.519,
+          "top_3": [
+            "Marcus Bell",
+            "Nora Lindqvist",
+            "Ayesha Siddiqui"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_model",
+          "requirement": "Demonstrated ability to train and ship machine learning models end to end",
+          "ndcg@5": 0.8748,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.3964,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Elena Petrova",
+            "Wei Zhang"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_rag",
+          "requirement": "Nice to have: experience with retrieval systems or vector search",
+          "ndcg@5": 0.2625,
+          "precision@3": 0.3333,
+          "recall@5": 0.3333,
+          "mrr": 0.5,
+          "kendall_tau": -0.3853,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Wei Zhang",
+            "Diego Ramirez"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_agent",
+          "requirement": "Must have experience building multi-step agent or tool-using LLM workflows",
+          "ndcg@5": 0.9908,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.7293,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_eval",
+          "requirement": "Required: rigorous offline evaluation practice with graded relevance or preference data",
+          "ndcg@5": 0.6643,
+          "precision@3": 0.6667,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": 0.2417,
+          "top_3": [
+            "Priya Raman",
+            "Viktor Novak",
+            "Omar Haddad"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_py",
+          "requirement": "Strong Python skills for research and production code",
+          "ndcg@5": 0.6089,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": -0.154,
+          "top_3": [
+            "Jonas Beck",
+            "Kwame Mensah",
+            "Yuki Tanaka"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_rag",
+          "requirement": "Experience with retrieval-augmented systems and grounding generated output in evidence",
+          "ndcg@5": 0.8041,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.3079,
+          "top_3": [
+            "Omar Haddad",
+            "Mei Lin Chow",
+            "Priya Raman"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_model",
+          "requirement": "Nice to have: experience training or fine-tuning models",
+          "ndcg@5": 0.5461,
+          "precision@3": 0.6667,
+          "recall@5": 0.4444,
+          "mrr": 0.5,
+          "kendall_tau": 0.0775,
+          "top_3": [
+            "Tomas Vidal",
+            "Leila Haddadi",
+            "Kwame Mensah"
+          ]
+        }
+      ]
+    },
+    {
+      "config": {
+        "requested_mode": "dense",
+        "effective_mode": "dense",
+        "rerank_requested": false,
+        "rerank_active": false,
+        "embedding_model": "lsa",
+        "k": 5
+      },
+      "corpus": {
+        "candidates_indexed": 30,
+        "queries": 15,
+        "judgements": 180,
+        "index_seconds": 1.03
+      },
+      "metrics": {
+        "ndcg@5": 0.7985,
+        "precision@3": 0.9111,
+        "recall@5": 0.4557,
+        "mrr": 1.0,
+        "kendall_tau": 0.2884
+      },
+      "retrieval_latency_ms": {
+        "mean": 13.817,
+        "p95": 2.979,
+        "samples": 15
+      },
+      "per_query": [
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_py",
+          "requirement": "Must have 3+ years of professional Python experience",
+          "ndcg@5": 0.7317,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": -0.1856,
+          "top_3": [
+            "Priya Raman",
+            "Ayesha Siddiqui",
+            "Hana Kobayashi"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_rag",
+          "requirement": "Required: experience designing and shipping retrieval-augmented generation systems in production",
+          "ndcg@5": 0.8546,
+          "precision@3": 0.6667,
+          "recall@5": 0.4444,
+          "mrr": 1.0,
+          "kendall_tau": 0.244,
+          "top_3": [
+            "Hana Kobayashi",
+            "Mei Lin Chow",
+            "Ruben Alvarez"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_serve",
+          "requirement": "Strong knowledge of building and deploying HTTP services with FastAPI and Docker on a cloud platform",
+          "ndcg@5": 0.4633,
+          "precision@3": 1.0,
+          "recall@5": 0.5556,
+          "mrr": 1.0,
+          "kendall_tau": 0.1583,
+          "top_3": [
+            "Sofia Marchetti",
+            "Hana Kobayashi",
+            "Fatima Zahra"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_eval",
+          "requirement": "Experience designing offline evaluation pipelines and measuring retrieval quality with ranking metrics",
+          "ndcg@5": 0.9908,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.6358,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Priya Raman",
+            "Fatima Zahra"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_agent",
+          "requirement": "Nice to have: exposure to agent orchestration frameworks and multi-step LLM workflows",
+          "ndcg@5": 0.7398,
+          "precision@3": 0.6667,
+          "recall@5": 0.375,
+          "mrr": 1.0,
+          "kendall_tau": 0.0172,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Nora Lindqvist"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_py",
+          "requirement": "Must have strong Python engineering skills in a production codebase",
+          "ndcg@5": 0.757,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": -0.0363,
+          "top_3": [
+            "Wei Zhang",
+            "Elena Petrova",
+            "Marcus Bell"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_pipe",
+          "requirement": "Required: experience operating batch or streaming data pipelines at scale",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4167,
+          "mrr": 1.0,
+          "kendall_tau": 0.5837,
+          "top_3": [
+            "Marcus Bell",
+            "Ayesha Siddiqui",
+            "Nora Lindqvist"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_serve",
+          "requirement": "Experience owning model serving infrastructure, containers, and deployment",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4545,
+          "mrr": 1.0,
+          "kendall_tau": 0.728,
+          "top_3": [
+            "Samuel Adeyemi",
+            "Daniel Okafor",
+            "Marcus Bell"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_model",
+          "requirement": "Demonstrated ability to train and ship machine learning models end to end",
+          "ndcg@5": 0.8875,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.5211,
+          "top_3": [
+            "Wei Zhang",
+            "Peter Svensson",
+            "Ayesha Siddiqui"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_rag",
+          "requirement": "Nice to have: experience with retrieval systems or vector search",
+          "ndcg@5": 0.4161,
+          "precision@3": 0.3333,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": -0.4068,
+          "top_3": [
+            "Wei Zhang",
+            "Ayesha Siddiqui",
+            "Diego Ramirez"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_agent",
+          "requirement": "Must have experience building multi-step agent or tool-using LLM workflows",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.6545,
+          "top_3": [
+            "Hana Kobayashi",
+            "Omar Haddad",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_eval",
+          "requirement": "Required: rigorous offline evaluation practice with graded relevance or preference data",
+          "ndcg@5": 0.7294,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.3419,
+          "top_3": [
+            "Priya Raman",
+            "Viktor Novak",
+            "Hana Kobayashi"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_py",
+          "requirement": "Strong Python skills for research and production code",
+          "ndcg@5": 0.6839,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.0917,
+          "top_3": [
+            "Jonas Beck",
+            "Kwame Mensah",
+            "Yuki Tanaka"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_rag",
+          "requirement": "Experience with retrieval-augmented systems and grounding generated output in evidence",
+          "ndcg@5": 0.8875,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.4354,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_model",
+          "requirement": "Nice to have: experience training or fine-tuning models",
+          "ndcg@5": 0.8358,
+          "precision@3": 1.0,
+          "recall@5": 0.5556,
+          "mrr": 1.0,
+          "kendall_tau": 0.5424,
+          "top_3": [
+            "Yuki Tanaka",
+            "Leila Haddadi",
+            "Jonas Beck"
+          ]
+        }
+      ]
+    },
+    {
+      "config": {
+        "requested_mode": "hybrid",
+        "effective_mode": "hybrid",
+        "rerank_requested": false,
+        "rerank_active": false,
+        "embedding_model": "lsa",
+        "k": 5
+      },
+      "corpus": {
+        "candidates_indexed": 30,
+        "queries": 15,
+        "judgements": 180,
+        "index_seconds": 0.026
+      },
+      "metrics": {
+        "ndcg@5": 0.7798,
+        "precision@3": 0.9333,
+        "recall@5": 0.4297,
+        "mrr": 1.0,
+        "kendall_tau": 0.24
+      },
+      "retrieval_latency_ms": {
+        "mean": 11.637,
+        "p95": 13.434,
+        "samples": 15
+      },
+      "per_query": [
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_py",
+          "requirement": "Must have 3+ years of professional Python experience",
+          "ndcg@5": 0.7317,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": -0.076,
+          "top_3": [
+            "Priya Raman",
+            "Ayesha Siddiqui",
+            "Hana Kobayashi"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_rag",
+          "requirement": "Required: experience designing and shipping retrieval-augmented generation systems in production",
+          "ndcg@5": 0.7436,
+          "precision@3": 1.0,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": -0.0939,
+          "top_3": [
+            "Priya Raman",
+            "Omar Haddad",
+            "Sofia Marchetti"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_serve",
+          "requirement": "Strong knowledge of building and deploying HTTP services with FastAPI and Docker on a cloud platform",
+          "ndcg@5": 0.7393,
+          "precision@3": 1.0,
+          "recall@5": 0.5556,
+          "mrr": 1.0,
+          "kendall_tau": 0.3341,
+          "top_3": [
+            "Sofia Marchetti",
+            "Fatima Zahra",
+            "Camille Dubois"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_eval",
+          "requirement": "Experience designing offline evaluation pipelines and measuring retrieval quality with ranking metrics",
+          "ndcg@5": 0.9908,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.6309,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Priya Raman",
+            "Fatima Zahra"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_agent",
+          "requirement": "Nice to have: exposure to agent orchestration frameworks and multi-step LLM workflows",
+          "ndcg@5": 0.7813,
+          "precision@3": 1.0,
+          "recall@5": 0.375,
+          "mrr": 1.0,
+          "kendall_tau": 0.1207,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_py",
+          "requirement": "Must have strong Python engineering skills in a production codebase",
+          "ndcg@5": 0.663,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.1089,
+          "top_3": [
+            "Elena Petrova",
+            "Marcus Bell",
+            "Daniel Okafor"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_pipe",
+          "requirement": "Required: experience operating batch or streaming data pipelines at scale",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4167,
+          "mrr": 1.0,
+          "kendall_tau": 0.5701,
+          "top_3": [
+            "Marcus Bell",
+            "Ayesha Siddiqui",
+            "Nora Lindqvist"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_serve",
+          "requirement": "Experience owning model serving infrastructure, containers, and deployment",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4545,
+          "mrr": 1.0,
+          "kendall_tau": 0.519,
+          "top_3": [
+            "Marcus Bell",
+            "Samuel Adeyemi",
+            "Nora Lindqvist"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_model",
+          "requirement": "Demonstrated ability to train and ship machine learning models end to end",
+          "ndcg@5": 0.8748,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.362,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Wei Zhang",
+            "Elena Petrova"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_rag",
+          "requirement": "Nice to have: experience with retrieval systems or vector search",
+          "ndcg@5": 0.4161,
+          "precision@3": 0.3333,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": -0.3513,
+          "top_3": [
+            "Wei Zhang",
+            "Ayesha Siddiqui",
+            "Diego Ramirez"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_agent",
+          "requirement": "Must have experience building multi-step agent or tool-using LLM workflows",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.7423,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_eval",
+          "requirement": "Required: rigorous offline evaluation practice with graded relevance or preference data",
+          "ndcg@5": 0.6643,
+          "precision@3": 0.6667,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": 0.2598,
+          "top_3": [
+            "Priya Raman",
+            "Viktor Novak",
+            "Omar Haddad"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_py",
+          "requirement": "Strong Python skills for research and production code",
+          "ndcg@5": 0.6089,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": -0.1651,
+          "top_3": [
+            "Jonas Beck",
+            "Kwame Mensah",
+            "Yuki Tanaka"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_rag",
+          "requirement": "Experience with retrieval-augmented systems and grounding generated output in evidence",
+          "ndcg@5": 0.7998,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.3119,
+          "top_3": [
+            "Omar Haddad",
+            "Mei Lin Chow",
+            "Priya Raman"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_model",
+          "requirement": "Nice to have: experience training or fine-tuning models",
+          "ndcg@5": 0.6837,
+          "precision@3": 1.0,
+          "recall@5": 0.4444,
+          "mrr": 1.0,
+          "kendall_tau": 0.3268,
+          "top_3": [
+            "Leila Haddadi",
+            "Yuki Tanaka",
+            "Kwame Mensah"
+          ]
+        }
+      ]
+    },
+    {
+      "config": {
+        "requested_mode": "hybrid",
+        "effective_mode": "hybrid",
+        "rerank_requested": true,
+        "rerank_active": false,
+        "embedding_model": "lsa",
+        "k": 5
+      },
+      "corpus": {
+        "candidates_indexed": 30,
+        "queries": 15,
+        "judgements": 180,
+        "index_seconds": 0.029
+      },
+      "metrics": {
+        "ndcg@5": 0.7798,
+        "precision@3": 0.9333,
+        "recall@5": 0.4297,
+        "mrr": 1.0,
+        "kendall_tau": 0.24
+      },
+      "retrieval_latency_ms": {
+        "mean": 2708.838,
+        "p95": 7.308,
+        "samples": 15
+      },
+      "per_query": [
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_py",
+          "requirement": "Must have 3+ years of professional Python experience",
+          "ndcg@5": 0.7317,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": -0.076,
+          "top_3": [
+            "Priya Raman",
+            "Ayesha Siddiqui",
+            "Hana Kobayashi"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_rag",
+          "requirement": "Required: experience designing and shipping retrieval-augmented generation systems in production",
+          "ndcg@5": 0.7436,
+          "precision@3": 1.0,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": -0.0939,
+          "top_3": [
+            "Priya Raman",
+            "Omar Haddad",
+            "Sofia Marchetti"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_serve",
+          "requirement": "Strong knowledge of building and deploying HTTP services with FastAPI and Docker on a cloud platform",
+          "ndcg@5": 0.7393,
+          "precision@3": 1.0,
+          "recall@5": 0.5556,
+          "mrr": 1.0,
+          "kendall_tau": 0.3341,
+          "top_3": [
+            "Sofia Marchetti",
+            "Fatima Zahra",
+            "Camille Dubois"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_eval",
+          "requirement": "Experience designing offline evaluation pipelines and measuring retrieval quality with ranking metrics",
+          "ndcg@5": 0.9908,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.6309,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Priya Raman",
+            "Fatima Zahra"
+          ]
+        },
+        {
+          "role_id": "r_ai_engineer",
+          "requirement_id": "req_agent",
+          "requirement": "Nice to have: exposure to agent orchestration frameworks and multi-step LLM workflows",
+          "ndcg@5": 0.7813,
+          "precision@3": 1.0,
+          "recall@5": 0.375,
+          "mrr": 1.0,
+          "kendall_tau": 0.1207,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_py",
+          "requirement": "Must have strong Python engineering skills in a production codebase",
+          "ndcg@5": 0.663,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.1089,
+          "top_3": [
+            "Elena Petrova",
+            "Marcus Bell",
+            "Daniel Okafor"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_pipe",
+          "requirement": "Required: experience operating batch or streaming data pipelines at scale",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4167,
+          "mrr": 1.0,
+          "kendall_tau": 0.5701,
+          "top_3": [
+            "Marcus Bell",
+            "Ayesha Siddiqui",
+            "Nora Lindqvist"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_serve",
+          "requirement": "Experience owning model serving infrastructure, containers, and deployment",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.4545,
+          "mrr": 1.0,
+          "kendall_tau": 0.519,
+          "top_3": [
+            "Marcus Bell",
+            "Samuel Adeyemi",
+            "Nora Lindqvist"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_model",
+          "requirement": "Demonstrated ability to train and ship machine learning models end to end",
+          "ndcg@5": 0.8748,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.362,
+          "top_3": [
+            "Ayesha Siddiqui",
+            "Wei Zhang",
+            "Elena Petrova"
+          ]
+        },
+        {
+          "role_id": "r_ml_platform",
+          "requirement_id": "req_rag",
+          "requirement": "Nice to have: experience with retrieval systems or vector search",
+          "ndcg@5": 0.4161,
+          "precision@3": 0.3333,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": -0.3513,
+          "top_3": [
+            "Wei Zhang",
+            "Ayesha Siddiqui",
+            "Diego Ramirez"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_agent",
+          "requirement": "Must have experience building multi-step agent or tool-using LLM workflows",
+          "ndcg@5": 1.0,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": 0.7423,
+          "top_3": [
+            "Omar Haddad",
+            "Hana Kobayashi",
+            "Mei Lin Chow"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_eval",
+          "requirement": "Required: rigorous offline evaluation practice with graded relevance or preference data",
+          "ndcg@5": 0.6643,
+          "precision@3": 0.6667,
+          "recall@5": 0.3333,
+          "mrr": 1.0,
+          "kendall_tau": 0.2598,
+          "top_3": [
+            "Priya Raman",
+            "Viktor Novak",
+            "Omar Haddad"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_py",
+          "requirement": "Strong Python skills for research and production code",
+          "ndcg@5": 0.6089,
+          "precision@3": 1.0,
+          "recall@5": 0.5,
+          "mrr": 1.0,
+          "kendall_tau": -0.1651,
+          "top_3": [
+            "Jonas Beck",
+            "Kwame Mensah",
+            "Yuki Tanaka"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_rag",
+          "requirement": "Experience with retrieval-augmented systems and grounding generated output in evidence",
+          "ndcg@5": 0.7998,
+          "precision@3": 1.0,
+          "recall@5": 0.4,
+          "mrr": 1.0,
+          "kendall_tau": 0.3119,
+          "top_3": [
+            "Omar Haddad",
+            "Mei Lin Chow",
+            "Priya Raman"
+          ]
+        },
+        {
+          "role_id": "r_applied_scientist",
+          "requirement_id": "req_model",
+          "requirement": "Nice to have: experience training or fine-tuning models",
+          "ndcg@5": 0.6837,
+          "precision@3": 1.0,
+          "recall@5": 0.4444,
+          "mrr": 1.0,
+          "kendall_tau": 0.3268,
+          "top_3": [
+            "Leila Haddadi",
+            "Yuki Tanaka",
+            "Kwame Mensah"
+          ]
+        }
+      ]
+    }
+  ]
+}

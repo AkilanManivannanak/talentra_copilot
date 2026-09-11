@@ -1,10 +1,8 @@
 """Document loaders wrapping LangChain with graceful fallback to raw text."""
 from __future__ import annotations
 
-import io
 import os
 from pathlib import Path
-from typing import Union
 
 
 def _try_langchain_pdf(path: str) -> str | None:
@@ -46,12 +44,12 @@ def _try_python_docx(path: str) -> str | None:
         return None
 
 
-def load_document(source: Union[str, Path, bytes], filename: str = "") -> str:
+def load_document(source: str | Path | bytes, filename: str = "") -> str:
     """
     Load text from a file path or raw bytes.
     Tries LangChain loaders first, then PyPDF2/python-docx, then raw decode.
     """
-    if isinstance(source, (str, Path)):
+    if isinstance(source, str | Path):
         path = str(source)
         ext = Path(path).suffix.lower()
         if ext == ".pdf":
@@ -59,7 +57,7 @@ def load_document(source: Union[str, Path, bytes], filename: str = "") -> str:
         if ext in (".docx", ".doc"):
             return _try_langchain_docx(path) or _try_python_docx(path) or ""
         # Text-based files
-        with open(path, "r", encoding="utf-8", errors="replace") as f:
+        with open(path, encoding="utf-8", errors="replace") as f:
             return f.read()
 
     # Bytes path (in-memory upload)

@@ -1,8 +1,6 @@
 """Text splitting with LangChain RecursiveCharacterTextSplitter + section metadata."""
 from __future__ import annotations
 
-from typing import Any
-
 
 def _langchain_split(text: str, chunk_size: int, chunk_overlap: int) -> list[dict]:
     """Use LangChain splitter with metadata."""
