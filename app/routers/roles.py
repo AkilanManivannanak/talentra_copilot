@@ -2,10 +2,16 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
-from app.models.schemas import EvaluateRoleRequest, EvaluateRoleResponse, RoleCreateRequest, RoleListResponse, RoleRecord
+from app.models.schemas import (
+    EvaluateRoleRequest,
+    EvaluateRoleResponse,
+    RoleCreateRequest,
+    RoleListResponse,
+    RoleRecord,
+)
 from app.routers.deps import get_services
 from app.services.container import ServiceContainer
-from app.services.document_parser import DocumentParseError, SUPPORTED_EXTENSIONS, extract_text
+from app.services.document_parser import SUPPORTED_EXTENSIONS, DocumentParseError, extract_text
 
 router = APIRouter(tags=["roles"])
 

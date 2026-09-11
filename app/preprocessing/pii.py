@@ -1,6 +1,7 @@
 """PII redaction using Microsoft Presidio with regex fallback."""
 from __future__ import annotations
 
+import importlib.util
 import re
 from functools import lru_cache
 
@@ -18,6 +19,14 @@ _PII_PATTERNS: list[tuple[str, re.Pattern, str]] = [
 ]
 
 
+# Entity types Presidio is allowed to flag. DATE_TIME is excluded on purpose: tenure
+# dates are load-bearing evidence for the ranker, and redacting them destroys signal.
+_PRESIDIO_ENTITIES = [
+    "PERSON", "EMAIL_ADDRESS", "PHONE_NUMBER", "US_SSN", "CREDIT_CARD",
+    "IP_ADDRESS", "URL", "LOCATION",
+]
+
+
 @lru_cache(maxsize=1)
 def _load_presidio():
     """Try to load Presidio AnalyzerEngine; return None if not installed."""
@@ -27,6 +36,18 @@ def _load_presidio():
         return engine
     except Exception:
         return None
+
+
+@lru_cache(maxsize=1)
+def presidio_available() -> bool:
+    """Cheap probe for /ops/build: is the package importable?
+
+    Deliberately does NOT call `_load_presidio()`. Building an AnalyzerEngine pulls a
+    spaCy pipeline into memory and took ~25s on a cold process, which turned a health
+    endpoint into a load-bearing stall. Availability is a package question; the engine
+    is built lazily on first real redaction.
+    """
+    return importlib.util.find_spec("presidio_analyzer") is not None
 
 
 def redact_pii(text: str, language: str = "en") -> tuple[str, list[str]]:
@@ -41,7 +62,10 @@ def redact_pii(text: str, language: str = "en") -> tuple[str, list[str]]:
     engine = _load_presidio()
     if engine is not None:
         try:
-            results = engine.analyze(text=text, language=language)
+            # Without an explicit allowlist Presidio runs every regional recogniser it
+            # has, which produced false positives such as IN_PAN on ordinary resume text.
+            # These are the entity types that are genuinely PII in a hiring document.
+            results = engine.analyze(text=text, language=language, entities=_PRESIDIO_ENTITIES)
             # Sort by position descending so offsets stay valid after replacement
             results_sorted = sorted(results, key=lambda r: r.start, reverse=True)
             for result in results_sorted:
