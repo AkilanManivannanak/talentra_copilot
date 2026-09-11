@@ -1,11 +1,12 @@
 """InterviewerAgent: generate tailored interview questions for a candidate."""
 from __future__ import annotations
 
-import random
+from collections.abc import Sequence
 from typing import Any
 
-from .base import BaseAgent
+from app.models.schemas import Evidence, InterviewQuestion, Requirement
 
+from .base import BaseAgent
 
 # Fallback question templates when no LLM is available
 _BEHAVIORAL_TEMPLATES = [
@@ -36,23 +37,25 @@ class InterviewerAgent(BaseAgent):
     def generate_questions(
         self,
         role_title: str,
-        requirements: list[str],
-        candidate_skills: list[str],
-        top_evidence: list[dict],
+        requirements: Sequence[Requirement] | Sequence[str],
+        candidate_skills: Sequence[str],
+        top_evidence: Sequence[Evidence] | Sequence[dict],
         num_questions: int = 8,
-    ) -> list[dict]:
-        """
-        Returns list of question dicts: {type, skill_focus, question}.
-        Tries LLM first; falls back to template generation.
-        """
+    ) -> list[InterviewQuestion]:
+        """Returns typed questions. Tries an LLM when configured, else templates."""
+        requirement_texts = [r.text if isinstance(r, Requirement) else str(r) for r in requirements]
+        evidence_dicts = [
+            {"text": e.snippet if isinstance(e, Evidence) else e.get("text", e.get("snippet", ""))}
+            for e in top_evidence
+        ]
         if self._llm:
             questions = self._llm_questions(
-                role_title, requirements, candidate_skills, top_evidence, num_questions
+                role_title, requirement_texts, list(candidate_skills), evidence_dicts, num_questions
             )
             if questions:
                 return questions
 
-        return self._template_questions(requirements, candidate_skills, num_questions)
+        return self._template_questions(requirement_texts, list(candidate_skills), num_questions)
 
     def _llm_questions(
         self,
@@ -61,7 +64,7 @@ class InterviewerAgent(BaseAgent):
         candidate_skills: list[str],
         top_evidence: list[dict],
         num_questions: int,
-    ) -> list[dict]:
+    ) -> list[InterviewQuestion]:
         from app.langchain_layer.prompts import INTERVIEW_QUESTION_PROMPT, format_prompt
 
         evidence_str = self._format_evidence(top_evidence, max_chars=600)
@@ -77,10 +80,7 @@ class InterviewerAgent(BaseAgent):
         parsed = self._parse_json(reply)
 
         if isinstance(parsed, list):
-            return [
-                {"type": "mixed", "skill_focus": "", "question": str(q)}
-                for q in parsed
-            ]
+            return [InterviewQuestion(type="mixed", skill_focus="", question=str(q)) for q in parsed]
         return []
 
     def _template_questions(
@@ -88,9 +88,9 @@ class InterviewerAgent(BaseAgent):
         requirements: list[str],
         candidate_skills: list[str],
         num_questions: int,
-    ) -> list[dict]:
-        """Generate questions from templates when LLM unavailable."""
-        questions = []
+    ) -> list[InterviewQuestion]:
+        """Generate questions from templates when no LLM is configured."""
+        questions: list[InterviewQuestion] = []
         focus_items = (candidate_skills + requirements)[:num_questions]
 
         behavioral_n = max(1, num_questions // 2)
@@ -102,7 +102,7 @@ class InterviewerAgent(BaseAgent):
                 skill=skill,
                 skill_context=f"applied {skill} in a real-world scenario",
             )
-            questions.append({"type": "behavioral", "skill_focus": skill, "question": q})
+            questions.append(InterviewQuestion(type="behavioral", skill_focus=skill, question=q))
 
         for i, skill in enumerate(focus_items[:technical_n]):
             template = _TECHNICAL_TEMPLATES[i % len(_TECHNICAL_TEMPLATES)]
@@ -110,6 +110,6 @@ class InterviewerAgent(BaseAgent):
                 skill=skill,
                 requirement_context=f"heavily relies on {skill}",
             )
-            questions.append({"type": "technical", "skill_focus": skill, "question": q})
+            questions.append(InterviewQuestion(type="technical", skill_focus=skill, question=q))
 
         return questions[:num_questions]
