@@ -60,8 +60,19 @@ class MetadataStore:
             return self._empty_state()
         if not isinstance(data, dict):
             return self._empty_state()
+
         for key in self._COLLECTIONS:
-            data.setdefault(key, [])
+            value = data.get(key)
+            if isinstance(value, list):
+                continue
+            if isinstance(value, dict):
+                # Legacy shape written by the removed app/core/store.py, which keyed each
+                # collection by id instead of storing a list. The committed data/metadata.json
+                # is in this format, so without coercion the first create_role() would call
+                # .append() on a dict and raise AttributeError.
+                data[key] = list(value.values())
+            else:
+                data[key] = []
         for candidate in data["candidates"]:
             candidate.setdefault("stage", "Applied")
             candidate.setdefault("shortlisted", False)
