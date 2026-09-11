@@ -4,10 +4,10 @@ Turns recruiter accept/reject decisions into preference pairs for RLHF.
 """
 from __future__ import annotations
 
+import importlib.util
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -68,12 +68,17 @@ class DPOTrainer:
         self.num_train_epochs = num_train_epochs
 
     def _check_deps(self) -> bool:
-        try:
-            import trl, transformers, datasets  # noqa: F401
-            return True
-        except ImportError as e:
-            logger.warning(f"DPO deps not available: {e}. Install: pip install trl transformers datasets")
+        """Availability is a package question, so ask the import system rather than
+        importing the packages themselves — importing transformers costs seconds."""
+        missing = [name for name in ("transformers", "trl", "datasets") if importlib.util.find_spec(name) is None]
+        if missing:
+            logger.warning(
+                "DPO dependencies not available: %s. Install with: "
+                "pip install -r requirements-ml.txt",
+                ", ".join(missing),
+            )
             return False
+        return True
 
     def train(self, dpo_data_path: str | Path) -> bool:
         """Run DPO fine-tuning. Returns True on success."""
@@ -81,9 +86,9 @@ class DPOTrainer:
             return False
 
         import torch
+        from datasets import load_dataset
         from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
         from trl import DPOTrainer as TRLDPOTrainer
-        from datasets import load_dataset
 
         logger.info(f"Loading model for DPO: {self.model_name_or_path}")
         tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path, trust_remote_code=True)

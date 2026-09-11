@@ -4,11 +4,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from .cleaner import clean_text, deduplicate_chunks
-from .sections import detect_sections, Section
-from .skills import extract_skills
-from .pii import redact_pii
+from .cleaner import clean_text
 from .dates import parse_tenure, total_years_experience
+from .pii import redact_pii
+from .sections import Section, detect_sections
+from .skills import extract_skills
 
 
 @dataclass

@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import re
 from datetime import date
-from typing import Optional
 
 # Match patterns like "Jan 2019 – Mar 2022", "2018-Present", "2020 to 2023"
 _RANGE_RE = re.compile(
@@ -25,7 +24,7 @@ _MONTH_MAP = {
 }
 
 
-def _parse_date_str(s: str) -> Optional[date]:
+def _parse_date_str(s: str) -> date | None:
     s = s.strip().lower()
     if s in ("present", "current", "now", "ongoing"):
         return date.today()

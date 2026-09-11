@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Iterable
 from statistics import mean
-from typing import Iterable
 
 from app.models.schemas import CandidateEvaluation, CopilotAnswerResponse, Evidence
+from app.services.faithfulness import FaithfulnessScorer
 from app.services.metadata_store import MetadataStore
 from app.services.ranking import RankingService
 from app.services.summary import SummaryService
-from app.services.vectorstore import VectorStoreService
 
 _GENERIC_QUESTION_WORDS = {
     "who", "which", "candidate", "candidates", "role", "job", "position", "requirement", "requirements",
@@ -16,7 +16,7 @@ _GENERIC_QUESTION_WORDS = {
     "shows", "showing", "strong", "stronger", "strongest", "best", "top", "match", "matches", "matched",
     "more", "most", "compare", "comparison", "give", "me", "why", "rank", "ranked", "above", "below",
     "evidence", "does", "has", "have", "what", "explain", "using", "current", "against", "fit", "fits",
-    "candidate", "job", "description", "jd", "result", "results", "tell", "about", "there", "their",
+    "description", "jd", "result", "tell", "about", "there", "their",
 }
 _GENERIC_NAME_TOKENS = {"resume", "cv", "main", "jul2025", "candidate"}
 _SKILL_HINTS = {"python", "machine learning", "ml", "ai", "rag", "retrieval", "fastapi", "docker", "sql", "api", "backend", "nlp", "llm", "cloud", "aws", "gcp"}
@@ -27,16 +27,39 @@ class CopilotService:
         self,
         *,
         metadata: MetadataStore,
-        vectorstore: VectorStoreService,
+        vectorstore,
         summary_service: SummaryService,
         ranking_service: RankingService,
+        faithfulness: FaithfulnessScorer | None = None,
     ) -> None:
         self._metadata = metadata
         self._vectorstore = vectorstore
         self._summary = summary_service
         self._ranking = ranking_service
+        self._faithfulness = faithfulness
 
     def answer(self, *, question: str, role_id: str, candidate_ids: list[str] | None = None, top_k: int = 8) -> CopilotAnswerResponse:
+        """Answer a recruiter question, then score the answer against its own citations.
+
+        Every return path goes through `_finalise`, so no answer can leave this service
+        without a groundedness number attached. That is the point: a citation list is not
+        evidence that the citations support what was said."""
+        return self._finalise(self._answer(question=question, role_id=role_id, candidate_ids=candidate_ids, top_k=top_k))
+
+    def _finalise(self, response: CopilotAnswerResponse) -> CopilotAnswerResponse:
+        if self._faithfulness is not None:
+            response.faithfulness = self._faithfulness.score(
+                answer=response.answer, citations=response.citations
+            )
+            if response.faithfulness.unsupported:
+                response.reasoning_trace.append(
+                    f"Groundedness {response.faithfulness.faithfulness:.2f} "
+                    f"({response.faithfulness.sentences_supported}/{response.faithfulness.sentences_total} "
+                    f"sentences supported by the cited evidence)."
+                )
+        return response
+
+    def _answer(self, *, question: str, role_id: str, candidate_ids: list[str] | None = None, top_k: int = 8) -> CopilotAnswerResponse:
         role = self._metadata.get_role(role_id)
         evaluation = self._ranking.evaluate_role(role_id=role_id, candidate_ids=candidate_ids or [], top_k_per_requirement=2)
         candidates = evaluation.candidates
@@ -69,10 +92,26 @@ class CopilotService:
                 return targeted
 
         citations = self._collect_generic_citations(question_clean, role_id, candidate_ids or [], top_k)
-        return self._summary.answer_question(question=question_clean, citations=citations, role_name=role.title)
+        if citations:
+            return self._summary.answer_question(
+                question=question_clean, citations=citations, role_name=role.title
+            )
+        # Retrieval found nothing for this phrasing, but an evaluation exists. Answering
+        # "I could not find supporting evidence" while holding a full ranking is the same
+        # class of bug as the v4->v5 contradiction: two sources of truth, and the weaker
+        # one wins. Fall back to the evaluation rather than to an apology.
+        return self._answer_from_evaluations(
+            question=question_clean, role_name=role.title, candidates=candidates, mentioned=mentioned
+        )
+
+    # Superlatives and comparatives are ranking questions regardless of the noun that
+    # follows them ("strongest candidate", "strongest for this role", "who is best here").
+    _RANKING_TERMS = ("strongest", "best", "top", "weakest", "worst", "strong fit", "better fit")
 
     def _is_evaluation_question(self, question: str) -> bool:
         q = question.lower()
+        if any(term in q for term in self._RANKING_TERMS):
+            return True
         patterns = [
             "based on the evaluation",
             "strongest candidate",

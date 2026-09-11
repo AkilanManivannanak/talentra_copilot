@@ -1,9 +1,9 @@
 """Skill entity extraction with spaCy NER + curated keyword fallback."""
 from __future__ import annotations
 
+import importlib.util
 import re
 from functools import lru_cache
-from typing import Optional
 
 # ---------------------------------------------------------------------------
 # Curated skill taxonomy (extend as needed)
@@ -67,6 +67,23 @@ def _load_spacy():
         return spacy.load("en_core_web_sm")
     except Exception:
         return None
+
+
+@lru_cache(maxsize=1)
+def spacy_available() -> bool:
+    """Cheap probe for /ops/build: is spaCy importable *and* is the model installed?
+
+    Checks the package and the model metadata rather than calling `spacy.load`, which
+    costs seconds on a cold process. See the note in `pii.presidio_available`.
+    """
+    if importlib.util.find_spec("spacy") is None:
+        return False
+    try:
+        import spacy.util  # type: ignore
+
+        return "en_core_web_sm" in spacy.util.get_installed_models()
+    except Exception:
+        return False
 
 
 def extract_skills(text: str, use_spacy: bool = True) -> list[str]:

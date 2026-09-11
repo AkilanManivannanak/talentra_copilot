@@ -4,7 +4,6 @@ from __future__ import annotations
 import re
 import unicodedata
 
-
 # Common ligature / smart-quote replacements
 _LIGATURES = {
     "\ufb00": "ff", "\ufb01": "fi", "\ufb02": "fl",

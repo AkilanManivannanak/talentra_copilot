@@ -2,8 +2,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 # Ordered list of (section_label, list_of_keywords_that_trigger_it)
 SECTION_PATTERNS: list[tuple[str, list[str]]] = [

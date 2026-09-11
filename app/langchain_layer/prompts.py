@@ -3,7 +3,6 @@ from __future__ import annotations
 
 from typing import Any
 
-
 # ---------------------------------------------------------------------------
 # Prompt templates (raw strings; wrapped in ChatPromptTemplate when LangChain
 # is available, used as f-string templates otherwise)
@@ -62,7 +61,7 @@ Candidate's strongest evidence: {top_evidence}
 Format as a JSON array of question strings. Mix behavioral (STAR format) and technical questions.
 """
 
-BIAS_AUDIT_PROMPT = """You are a hiring bias auditor. Review the following candidate evaluations for potential bias.
+BIAS_AUDIT_PROMPT = """UNUSED. Kept only so old references fail loudly rather than silently. You are a hiring bias auditor. Review the following candidate evaluations for potential bias.
 
 Candidates and scores:
 {candidate_scores}
@@ -84,10 +83,11 @@ Respond with JSON: {{"bias_flags": [<list of concerns>], "severity": "none|low|m
 def _build_chain(prompt_template: str, llm: Any) -> Any:
     """Build a LangChain chain from a prompt template string and an LLM."""
     try:
-        from langchain.prompts import PromptTemplate  # type: ignore
-        from langchain.chains import LLMChain  # type: ignore
         # Extract input variables from {placeholder} patterns
         import re
+
+        from langchain.chains import LLMChain  # type: ignore
+        from langchain.prompts import PromptTemplate  # type: ignore
         vars_ = re.findall(r"\{(\w+)\}", prompt_template)
         prompt = PromptTemplate(input_variables=list(set(vars_)), template=prompt_template)
         return LLMChain(llm=llm, prompt=prompt)

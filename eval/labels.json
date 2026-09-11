@@ -1,0 +1,1736 @@
+{
+  "schema_version": 2,
+  "method": "Synthetic resumes authored from structured evidence profiles; graded relevance (0-3) derived from the profile, not from the prose. See eval/build_labels.py.",
+  "grading_scale": {
+    "3": "strong direct evidence",
+    "2": "clear evidence",
+    "1": "weak or adjacent",
+    "0": "none"
+  },
+  "limitation": "Synthetic prose is cleaner and more consistent than real resumes, so absolute scores are optimistic. Use this set for relative comparison between retrieval configurations, not as an estimate of real-world accuracy.",
+  "counts": {
+    "roles": 3,
+    "candidates": 30,
+    "requirements": 15,
+    "judgements": 180
+  },
+  "roles": [
+    {
+      "id": "r_ai_engineer",
+      "title": "AI Engineer, Search & Retrieval",
+      "description": "AI Engineer, Search & Retrieval\n\nRequirements:\n- Must have 3+ years of professional Python experience.\n- Required: experience designing and shipping retrieval-augmented generation systems in production.\n- Strong knowledge of building and deploying HTTP services with FastAPI and Docker on a cloud platform.\n- Experience designing offline evaluation pipelines and measuring retrieval quality with ranking metrics.\nNice to have: exposure to agent orchestration frameworks and multi-step LLM workflows.\n",
+      "requirements": [
+        {
+          "id": "req_py",
+          "text": "Must have 3+ years of professional Python experience",
+          "capability": "python_depth",
+          "must_have": true
+        },
+        {
+          "id": "req_rag",
+          "text": "Required: experience designing and shipping retrieval-augmented generation systems in production",
+          "capability": "rag_systems",
+          "must_have": true
+        },
+        {
+          "id": "req_serve",
+          "text": "Strong knowledge of building and deploying HTTP services with FastAPI and Docker on a cloud platform",
+          "capability": "serving_infra",
+          "must_have": false
+        },
+        {
+          "id": "req_eval",
+          "text": "Experience designing offline evaluation pipelines and measuring retrieval quality with ranking metrics",
+          "capability": "eval_rigour",
+          "must_have": false
+        },
+        {
+          "id": "req_agent",
+          "text": "Nice to have: exposure to agent orchestration frameworks and multi-step LLM workflows",
+          "capability": "agent_orchestration",
+          "must_have": false
+        }
+      ],
+      "candidate_ids": [
+        "c01",
+        "c03",
+        "c05",
+        "c07",
+        "c08",
+        "c09",
+        "c13",
+        "c15",
+        "c19",
+        "c24",
+        "c26",
+        "c30"
+      ]
+    },
+    {
+      "id": "r_ml_platform",
+      "title": "Machine Learning Platform Engineer",
+      "description": "Machine Learning Platform Engineer\n\nRequirements:\n- Must have strong Python engineering skills in a production codebase.\n- Required: experience operating batch or streaming data pipelines at scale.\n- Experience owning model serving infrastructure, containers, and deployment.\n- Demonstrated ability to train and ship machine learning models end to end.\nNice to have: experience with retrieval systems or vector search.\n",
+      "requirements": [
+        {
+          "id": "req_py",
+          "text": "Must have strong Python engineering skills in a production codebase",
+          "capability": "python_depth",
+          "must_have": true
+        },
+        {
+          "id": "req_pipe",
+          "text": "Required: experience operating batch or streaming data pipelines at scale",
+          "capability": "data_pipelines",
+          "must_have": true
+        },
+        {
+          "id": "req_serve",
+          "text": "Experience owning model serving infrastructure, containers, and deployment",
+          "capability": "serving_infra",
+          "must_have": false
+        },
+        {
+          "id": "req_model",
+          "text": "Demonstrated ability to train and ship machine learning models end to end",
+          "capability": "ml_modelling",
+          "must_have": false
+        },
+        {
+          "id": "req_rag",
+          "text": "Nice to have: experience with retrieval systems or vector search",
+          "capability": "rag_systems",
+          "must_have": false
+        }
+      ],
+      "candidate_ids": [
+        "c02",
+        "c05",
+        "c10",
+        "c11",
+        "c15",
+        "c16",
+        "c17",
+        "c20",
+        "c23",
+        "c25",
+        "c27",
+        "c28"
+      ]
+    },
+    {
+      "id": "r_applied_scientist",
+      "title": "Applied Scientist, Agentic Systems",
+      "description": "Applied Scientist, Agentic Systems\n\nRequirements:\n- Must have experience building multi-step agent or tool-using LLM workflows.\n- Required: rigorous offline evaluation practice with graded relevance or preference data.\n- Strong Python skills for research and production code.\n- Experience with retrieval-augmented systems and grounding generated output in evidence.\nNice to have: experience training or fine-tuning models.\n",
+      "requirements": [
+        {
+          "id": "req_agent",
+          "text": "Must have experience building multi-step agent or tool-using LLM workflows",
+          "capability": "agent_orchestration",
+          "must_have": true
+        },
+        {
+          "id": "req_eval",
+          "text": "Required: rigorous offline evaluation practice with graded relevance or preference data",
+          "capability": "eval_rigour",
+          "must_have": true
+        },
+        {
+          "id": "req_py",
+          "text": "Strong Python skills for research and production code",
+          "capability": "python_depth",
+          "must_have": false
+        },
+        {
+          "id": "req_rag",
+          "text": "Experience with retrieval-augmented systems and grounding generated output in evidence",
+          "capability": "rag_systems",
+          "must_have": false
+        },
+        {
+          "id": "req_model",
+          "text": "Nice to have: experience training or fine-tuning models",
+          "capability": "ml_modelling",
+          "must_have": false
+        }
+      ],
+      "candidate_ids": [
+        "c01",
+        "c03",
+        "c04",
+        "c06",
+        "c09",
+        "c12",
+        "c14",
+        "c19",
+        "c21",
+        "c24",
+        "c26",
+        "c29"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "id": "c01",
+      "name": "Priya Raman",
+      "filename": "priya_raman_resume.txt",
+      "text": "Priya Raman\nSenior engineer, 7 years professional experience.\n\n- Six years writing production services in Python; owned the typing migration across a 200k-line codebase.\n- Designed and shipped a retrieval-augmented assistant over 40M internal documents, including chunking strategy, hybrid search, and a citation layer that grounded every generated claim.\n- Built the offline evaluation harness the search team ranks releases on: graded relevance judgements, nDCG and MRR dashboards, and a regression gate wired into CI.\n- Own the serving stack: FastAPI behind a load balancer, containerised, autoscaled on EKS, with SLO dashboards and paging.\n- Chained several LLM calls with tool use and branching logic for an internal automation.\n- Wrote scheduled ETL jobs in Airflow feeding the analytics warehouse.\n- Trained and shipped ranking and classification models end to end, including feature design, calibration, and drift monitoring.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 3,
+        "eval_rigour": 3,
+        "serving_infra": 3,
+        "agent_orchestration": 2,
+        "data_pipelines": 2,
+        "ml_modelling": 3
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c02",
+      "name": "Daniel Okafor",
+      "filename": "daniel_okafor_resume.txt",
+      "text": "Daniel Okafor\nSenior engineer, 8 years professional experience.\n\n- Primary language for five years: async services, packaging, and CPython profiling for hot paths.\n- Implemented semantic search over a knowledge base and wired it into an LLM answer endpoint.\n- Wrote the metric pipeline that tracked model quality release over release.\n- Ran the platform's request-serving layer — containers, blue-green rollout, and latency budgets per endpoint.\n- No experience with multi-step or tool-using model workflows.\n- Built the ingestion layer processing 3TB/day with backfill and late-arrival handling.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 2,
+        "eval_rigour": 2,
+        "serving_infra": 3,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 2
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c03",
+      "name": "Mei Lin Chow",
+      "filename": "mei_lin_chow_resume.txt",
+      "text": "Mei Lin Chow\nEngineer with 4 years of professional experience.\n\n- Six years writing production services in Python; owned the typing migration across a 200k-line codebase.\n- Designed and shipped a retrieval-augmented assistant over 40M internal documents, including chunking strategy, hybrid search, and a citation layer that grounded every generated claim.\n- Ran A/B tests and offline precision/recall analysis before each model rollout.\n- Built REST services with FastAPI and shipped them as Docker images to a managed cloud runtime.\n- Built a multi-step agent workflow with conditional routing, checkpointed state, and a mandatory human approval step before any write to the system of record.\n- Wrote ad-hoc SQL queries and pandas scripts for analysis.\n- Built supervised models with scikit-learn and PyTorch for internal prediction tasks.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 3,
+        "eval_rigour": 2,
+        "serving_infra": 2,
+        "agent_orchestration": 3,
+        "data_pipelines": 1,
+        "ml_modelling": 2
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c04",
+      "name": "Tomas Vidal",
+      "filename": "tomas_vidal_resume.txt",
+      "text": "Tomas Vidal\nEngineer with 3 years of professional experience.\n\n- Built and maintained several Python microservices over the last two years.\n- Implemented semantic search over a knowledge base and wired it into an LLM answer endpoint.\n- Checked model outputs manually before shipping.\n- Containerised our model services and deployed them to Google Cloud Run.\n- Used a graph-based orchestration framework to sequence model calls with fallbacks.\n- Maintained dbt models and the SQL transformations behind reporting.\n- Trained baseline models for a university project.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 2,
+        "eval_rigour": 1,
+        "serving_infra": 2,
+        "agent_orchestration": 2,
+        "data_pipelines": 2,
+        "ml_modelling": 1
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c05",
+      "name": "Ayesha Siddiqui",
+      "filename": "ayesha_siddiqui_resume.txt",
+      "text": "Ayesha Siddiqui\nSenior engineer, 9 years professional experience.\n\n- Three years of day-to-day Python across data services and internal tooling.\n- Work has been in classical tabular modelling; no retrieval or LLM systems.\n- Built the offline evaluation harness the search team ranks releases on: graded relevance judgements, nDCG and MRR dashboards, and a regression gate wired into CI.\n- Own the serving stack: FastAPI behind a load balancer, containerised, autoscaled on EKS, with SLO dashboards and paging.\n- No experience with multi-step or tool-using model workflows.\n- Own the batch and streaming pipelines feeding the feature store — Spark, Airflow, and schema contracts across teams.\n- Trained and shipped ranking and classification models end to end, including feature design, calibration, and drift monitoring.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 0,
+        "eval_rigour": 3,
+        "serving_infra": 3,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 3
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c06",
+      "name": "Jonas Beck",
+      "filename": "jonas_beck_resume.txt",
+      "text": "Jonas Beck\nEarly-career engineer, 1 year(s) of professional experience.\n\n- Built and maintained several Python microservices over the last two years.\n- Read widely on retrieval augmentation; no production implementation yet.\n- Checked model outputs manually before shipping.\n- Wrote a Dockerfile once for a class assignment.\n- Familiar with function calling from reading the API docs.\n- Cleaned datasets by hand for research projects.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 1,
+        "eval_rigour": 1,
+        "serving_infra": 1,
+        "agent_orchestration": 1,
+        "data_pipelines": 1,
+        "ml_modelling": 2
+      },
+      "_seniority": "junior"
+    },
+    {
+      "id": "c07",
+      "name": "Fatima Zahra",
+      "filename": "fatima_zahra_resume.txt",
+      "text": "Fatima Zahra\nEngineer with 5 years of professional experience.\n\n- Six years writing production services in Python; owned the typing migration across a 200k-line codebase.\n- Built a document question-answering prototype using vector search over embedded passages, deployed internally.\n- Built the offline evaluation harness the search team ranks releases on: graded relevance judgements, nDCG and MRR dashboards, and a regression gate wired into CI.\n- Built REST services with FastAPI and shipped them as Docker images to a managed cloud runtime.\n- Experimented with agent frameworks on a side project.\n- Wrote scheduled ETL jobs in Airflow feeding the analytics warehouse.\n- Trained and shipped ranking and classification models end to end, including feature design, calibration, and drift monitoring.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 2,
+        "eval_rigour": 3,
+        "serving_infra": 2,
+        "agent_orchestration": 1,
+        "data_pipelines": 2,
+        "ml_modelling": 3
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c08",
+      "name": "Ruben Alvarez",
+      "filename": "ruben_alvarez_resume.txt",
+      "text": "Ruben Alvarez\nGraduate student; internships and coursework, no full-time industry role yet.\n\n- Comfortable scripting in Python; most professional work was in Java.\n- Read widely on retrieval augmentation; no production implementation yet.\n- Checked model outputs manually before shipping.\n- All work has been in notebooks handed to an engineering team to productionise.\n- No experience with multi-step or tool-using model workflows.\n- Cleaned datasets by hand for research projects.\n- Trained baseline models for a university project.",
+      "_profile": {
+        "python_depth": 1,
+        "rag_systems": 1,
+        "eval_rigour": 1,
+        "serving_infra": 0,
+        "agent_orchestration": 0,
+        "data_pipelines": 1,
+        "ml_modelling": 1
+      },
+      "_seniority": "student"
+    },
+    {
+      "id": "c09",
+      "name": "Hana Kobayashi",
+      "filename": "hana_kobayashi_resume.txt",
+      "text": "Hana Kobayashi\nSenior engineer, 6 years professional experience.\n\n- Six years writing production services in Python; owned the typing migration across a 200k-line codebase.\n- Designed and shipped a retrieval-augmented assistant over 40M internal documents, including chunking strategy, hybrid search, and a citation layer that grounded every generated claim.\n- Ran A/B tests and offline precision/recall analysis before each model rollout.\n- Built REST services with FastAPI and shipped them as Docker images to a managed cloud runtime.\n- Built a multi-step agent workflow with conditional routing, checkpointed state, and a mandatory human approval step before any write to the system of record.\n- No data engineering exposure.\n- Built supervised models with scikit-learn and PyTorch for internal prediction tasks.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 3,
+        "eval_rigour": 2,
+        "serving_infra": 2,
+        "agent_orchestration": 3,
+        "data_pipelines": 0,
+        "ml_modelling": 2
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c10",
+      "name": "Samuel Adeyemi",
+      "filename": "samuel_adeyemi_resume.txt",
+      "text": "Samuel Adeyemi\nEngineer with 4 years of professional experience.\n\n- Built and maintained several Python microservices over the last two years.\n- Work has been in classical tabular modelling; no retrieval or LLM systems.\n- Wrote the metric pipeline that tracked model quality release over release.\n- Ran the platform's request-serving layer — containers, blue-green rollout, and latency budgets per endpoint.\n- No experience with multi-step or tool-using model workflows.\n- Built the ingestion layer processing 3TB/day with backfill and late-arrival handling.\n- Trained baseline models for a university project.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 0,
+        "eval_rigour": 2,
+        "serving_infra": 3,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 1
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c11",
+      "name": "Elena Petrova",
+      "filename": "elena_petrova_resume.txt",
+      "text": "Elena Petrova\nSenior engineer, 10 years professional experience.\n\n- Six years writing production services in Python; owned the typing migration across a 200k-line codebase.\n- Followed a tutorial to build a chatbot over PDFs for a hackathon weekend.\n- Built the offline evaluation harness the search team ranks releases on: graded relevance judgements, nDCG and MRR dashboards, and a regression gate wired into CI.\n- Built REST services with FastAPI and shipped them as Docker images to a managed cloud runtime.\n- No experience with multi-step or tool-using model workflows.\n- Own the batch and streaming pipelines feeding the feature store — Spark, Airflow, and schema contracts across teams.\n- Trained and shipped ranking and classification models end to end, including feature design, calibration, and drift monitoring.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 1,
+        "eval_rigour": 3,
+        "serving_infra": 2,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 3
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c12",
+      "name": "Kwame Mensah",
+      "filename": "kwame_mensah_resume.txt",
+      "text": "Kwame Mensah\nEarly-career engineer, 2 year(s) of professional experience.\n\n- Built and maintained several Python microservices over the last two years.\n- Implemented semantic search over a knowledge base and wired it into an LLM answer endpoint.\n- Checked model outputs manually before shipping.\n- Wrote a Dockerfile once for a class assignment.\n- Used a graph-based orchestration framework to sequence model calls with fallbacks.\n- Cleaned datasets by hand for research projects.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 2,
+        "eval_rigour": 1,
+        "serving_infra": 1,
+        "agent_orchestration": 2,
+        "data_pipelines": 1,
+        "ml_modelling": 2
+      },
+      "_seniority": "junior"
+    },
+    {
+      "id": "c13",
+      "name": "Sofia Marchetti",
+      "filename": "sofia_marchetti_resume.txt",
+      "text": "Sofia Marchetti\nEngineer with 5 years of professional experience.\n\n- Three years of day-to-day Python across data services and internal tooling.\n- Designed and shipped a retrieval-augmented assistant over 40M internal documents, including chunking strategy, hybrid search, and a citation layer that grounded every generated claim.\n- Ran A/B tests and offline precision/recall analysis before each model rollout.\n- Built REST services with FastAPI and shipped them as Docker images to a managed cloud runtime.\n- Chained several LLM calls with tool use and branching logic for an internal automation.\n- Wrote scheduled ETL jobs in Airflow feeding the analytics warehouse.\n- Built supervised models with scikit-learn and PyTorch for internal prediction tasks.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 3,
+        "eval_rigour": 2,
+        "serving_infra": 2,
+        "agent_orchestration": 2,
+        "data_pipelines": 2,
+        "ml_modelling": 2
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c14",
+      "name": "Arjun Nair",
+      "filename": "arjun_nair_resume.txt",
+      "text": "Arjun Nair\nGraduate student; internships and coursework, no full-time industry role yet.\n\n- Comfortable scripting in Python; most professional work was in Java.\n- Implemented semantic search over a knowledge base and wired it into an LLM answer endpoint.\n- Checked model outputs manually before shipping.\n- Wrote a Dockerfile once for a class assignment.\n- Familiar with function calling from reading the API docs.\n- No data engineering exposure.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 1,
+        "rag_systems": 2,
+        "eval_rigour": 1,
+        "serving_infra": 1,
+        "agent_orchestration": 1,
+        "data_pipelines": 0,
+        "ml_modelling": 2
+      },
+      "_seniority": "student"
+    },
+    {
+      "id": "c15",
+      "name": "Nora Lindqvist",
+      "filename": "nora_lindqvist_resume.txt",
+      "text": "Nora Lindqvist\nSenior engineer, 7 years professional experience.\n\n- Primarily a frontend engineer working in TypeScript and Swift.\n- Work has been in classical tabular modelling; no retrieval or LLM systems.\n- Ran A/B tests and offline precision/recall analysis before each model rollout.\n- Own the serving stack: FastAPI behind a load balancer, containerised, autoscaled on EKS, with SLO dashboards and paging.\n- No experience with multi-step or tool-using model workflows.\n- Own the batch and streaming pipelines feeding the feature store — Spark, Airflow, and schema contracts across teams.\n- Background is pure backend engineering; no modelling work.",
+      "_profile": {
+        "python_depth": 0,
+        "rag_systems": 0,
+        "eval_rigour": 2,
+        "serving_infra": 3,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 0
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c16",
+      "name": "Ibrahim Toure",
+      "filename": "ibrahim_toure_resume.txt",
+      "text": "Ibrahim Toure\nEngineer with 3 years of professional experience.\n\n- Primary language for five years: async services, packaging, and CPython profiling for hot paths.\n- Read widely on retrieval augmentation; no production implementation yet.\n- Wrote the metric pipeline that tracked model quality release over release.\n- Containerised our model services and deployed them to Google Cloud Run.\n- Familiar with function calling from reading the API docs.\n- Maintained dbt models and the SQL transformations behind reporting.\n- Led model development for the recommendation surface; owned training, offline eval, and online rollout.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 1,
+        "eval_rigour": 2,
+        "serving_infra": 2,
+        "agent_orchestration": 1,
+        "data_pipelines": 2,
+        "ml_modelling": 3
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c17",
+      "name": "Wei Zhang",
+      "filename": "wei_zhang_resume.txt",
+      "text": "Wei Zhang\nSenior engineer, 8 years professional experience.\n\n- Six years writing production services in Python; owned the typing migration across a 200k-line codebase.\n- Built a document question-answering prototype using vector search over embedded passages, deployed internally.\n- Built the offline evaluation harness the search team ranks releases on: graded relevance judgements, nDCG and MRR dashboards, and a regression gate wired into CI.\n- Own the serving stack: FastAPI behind a load balancer, containerised, autoscaled on EKS, with SLO dashboards and paging.\n- Chained several LLM calls with tool use and branching logic for an internal automation.\n- Wrote scheduled ETL jobs in Airflow feeding the analytics warehouse.\n- Trained and shipped ranking and classification models end to end, including feature design, calibration, and drift monitoring.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 2,
+        "eval_rigour": 3,
+        "serving_infra": 3,
+        "agent_orchestration": 2,
+        "data_pipelines": 2,
+        "ml_modelling": 3
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c18",
+      "name": "Lucia Fernandes",
+      "filename": "lucia_fernandes_resume.txt",
+      "text": "Lucia Fernandes\nEarly-career engineer, 2 year(s) of professional experience.\n\n- Built and maintained several Python microservices over the last two years.\n- Read widely on retrieval augmentation; no production implementation yet.\n- No formal evaluation practice; correctness was assessed by code review.\n- Containerised our model services and deployed them to Google Cloud Run.\n- No experience with multi-step or tool-using model workflows.\n- Maintained dbt models and the SQL transformations behind reporting.\n- Trained baseline models for a university project.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 1,
+        "eval_rigour": 0,
+        "serving_infra": 2,
+        "agent_orchestration": 0,
+        "data_pipelines": 2,
+        "ml_modelling": 1
+      },
+      "_seniority": "junior"
+    },
+    {
+      "id": "c19",
+      "name": "Omar Haddad",
+      "filename": "omar_haddad_resume.txt",
+      "text": "Omar Haddad\nEngineer with 4 years of professional experience.\n\n- Three years of day-to-day Python across data services and internal tooling.\n- Designed and shipped a retrieval-augmented assistant over 40M internal documents, including chunking strategy, hybrid search, and a citation layer that grounded every generated claim.\n- Reported accuracy and F1 on a held-out split for course projects.\n- Deployed a Streamlit demo to a free hosting tier.\n- Built a multi-step agent workflow with conditional routing, checkpointed state, and a mandatory human approval step before any write to the system of record.\n- No data engineering exposure.\n- Built supervised models with scikit-learn and PyTorch for internal prediction tasks.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 3,
+        "eval_rigour": 1,
+        "serving_infra": 1,
+        "agent_orchestration": 3,
+        "data_pipelines": 0,
+        "ml_modelling": 2
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c20",
+      "name": "Grace Mwangi",
+      "filename": "grace_mwangi_resume.txt",
+      "text": "Grace Mwangi\nSenior engineer, 6 years professional experience.\n\n- Primary language for five years: async services, packaging, and CPython profiling for hot paths.\n- Work has been in classical tabular modelling; no retrieval or LLM systems.\n- Established the labelling guidelines and inter-annotator agreement process for our ranking quality programme.\n- Containerised our model services and deployed them to Google Cloud Run.\n- No experience with multi-step or tool-using model workflows.\n- Built the ingestion layer processing 3TB/day with backfill and late-arrival handling.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 0,
+        "eval_rigour": 3,
+        "serving_infra": 2,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 2
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c21",
+      "name": "Viktor Novak",
+      "filename": "viktor_novak_resume.txt",
+      "text": "Viktor Novak\nEngineer with 5 years of professional experience.\n\n- Three years of day-to-day Python across data services and internal tooling.\n- Built a document question-answering prototype using vector search over embedded passages, deployed internally.\n- Ran A/B tests and offline precision/recall analysis before each model rollout.\n- Own the serving stack: FastAPI behind a load balancer, containerised, autoscaled on EKS, with SLO dashboards and paging.\n- Chained several LLM calls with tool use and branching logic for an internal automation.\n- Wrote ad-hoc SQL queries and pandas scripts for analysis.\n- Completed several machine learning courses and Kaggle competitions.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 2,
+        "eval_rigour": 2,
+        "serving_infra": 3,
+        "agent_orchestration": 2,
+        "data_pipelines": 1,
+        "ml_modelling": 1
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c22",
+      "name": "Aisha Rahman",
+      "filename": "aisha_rahman_resume.txt",
+      "text": "Aisha Rahman\nGraduate student; internships and coursework, no full-time industry role yet.\n\n- Built and maintained several Python microservices over the last two years.\n- Read widely on retrieval augmentation; no production implementation yet.\n- Checked model outputs manually before shipping.\n- All work has been in notebooks handed to an engineering team to productionise.\n- Familiar with function calling from reading the API docs.\n- Cleaned datasets by hand for research projects.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 1,
+        "eval_rigour": 1,
+        "serving_infra": 0,
+        "agent_orchestration": 1,
+        "data_pipelines": 1,
+        "ml_modelling": 2
+      },
+      "_seniority": "student"
+    },
+    {
+      "id": "c23",
+      "name": "Marcus Bell",
+      "filename": "marcus_bell_resume.txt",
+      "text": "Marcus Bell\nSenior engineer, 11 years professional experience.\n\n- Three years of day-to-day Python across data services and internal tooling.\n- Work has been in classical tabular modelling; no retrieval or LLM systems.\n- Ran A/B tests and offline precision/recall analysis before each model rollout.\n- Own the serving stack: FastAPI behind a load balancer, containerised, autoscaled on EKS, with SLO dashboards and paging.\n- No experience with multi-step or tool-using model workflows.\n- Own the batch and streaming pipelines feeding the feature store — Spark, Airflow, and schema contracts across teams.\n- Background is pure backend engineering; no modelling work.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 0,
+        "eval_rigour": 2,
+        "serving_infra": 3,
+        "agent_orchestration": 0,
+        "data_pipelines": 3,
+        "ml_modelling": 0
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c24",
+      "name": "Yuki Tanaka",
+      "filename": "yuki_tanaka_resume.txt",
+      "text": "Yuki Tanaka\nEngineer with 4 years of professional experience.\n\n- Primary language for five years: async services, packaging, and CPython profiling for hot paths.\n- Owned a production question-answering system backed by semantic search; ran the chunking and reranking experiments that took answer groundedness from 0.61 to 0.88.\n- Established the labelling guidelines and inter-annotator agreement process for our ranking quality programme.\n- Wrote a Dockerfile once for a class assignment.\n- Used a graph-based orchestration framework to sequence model calls with fallbacks.\n- Cleaned datasets by hand for research projects.\n- Led model development for the recommendation surface; owned training, offline eval, and online rollout.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 3,
+        "eval_rigour": 3,
+        "serving_infra": 1,
+        "agent_orchestration": 2,
+        "data_pipelines": 1,
+        "ml_modelling": 3
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c25",
+      "name": "Diego Ramirez",
+      "filename": "diego_ramirez_resume.txt",
+      "text": "Diego Ramirez\nEarly-career engineer, 1 year(s) of professional experience.\n\n- Used Python for coursework, notebooks, and a capstone project.\n- Work has been in classical tabular modelling; no retrieval or LLM systems.\n- No formal evaluation practice; correctness was assessed by code review.\n- Deployed a Streamlit demo to a free hosting tier.\n- No experience with multi-step or tool-using model workflows.\n- Wrote scheduled ETL jobs in Airflow feeding the analytics warehouse.\n- Completed several machine learning courses and Kaggle competitions.",
+      "_profile": {
+        "python_depth": 1,
+        "rag_systems": 0,
+        "eval_rigour": 0,
+        "serving_infra": 1,
+        "agent_orchestration": 0,
+        "data_pipelines": 2,
+        "ml_modelling": 1
+      },
+      "_seniority": "junior"
+    },
+    {
+      "id": "c26",
+      "name": "Leila Haddadi",
+      "filename": "leila_haddadi_resume.txt",
+      "text": "Leila Haddadi\nEngineer with 6 years of professional experience.\n\n- Primary language for five years: async services, packaging, and CPython profiling for hot paths.\n- Implemented semantic search over a knowledge base and wired it into an LLM answer endpoint.\n- Wrote the metric pipeline that tracked model quality release over release.\n- Containerised our model services and deployed them to Google Cloud Run.\n- Designed the orchestration layer for our tool-using assistant: typed state, retries, and an approval gate on side effects.\n- Maintained dbt models and the SQL transformations behind reporting.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 2,
+        "eval_rigour": 2,
+        "serving_infra": 2,
+        "agent_orchestration": 3,
+        "data_pipelines": 2,
+        "ml_modelling": 2
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c27",
+      "name": "Peter Svensson",
+      "filename": "peter_svensson_resume.txt",
+      "text": "Peter Svensson\nSenior engineer, 9 years professional experience.\n\n- Three years of day-to-day Python across data services and internal tooling.\n- Followed a tutorial to build a chatbot over PDFs for a hackathon weekend.\n- Built the offline evaluation harness the search team ranks releases on: graded relevance judgements, nDCG and MRR dashboards, and a regression gate wired into CI.\n- Built REST services with FastAPI and shipped them as Docker images to a managed cloud runtime.\n- Experimented with agent frameworks on a side project.\n- Own the batch and streaming pipelines feeding the feature store — Spark, Airflow, and schema contracts across teams.\n- Trained and shipped ranking and classification models end to end, including feature design, calibration, and drift monitoring.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 1,
+        "eval_rigour": 3,
+        "serving_infra": 2,
+        "agent_orchestration": 1,
+        "data_pipelines": 3,
+        "ml_modelling": 3
+      },
+      "_seniority": "senior"
+    },
+    {
+      "id": "c28",
+      "name": "Ananya Iyer",
+      "filename": "ananya_iyer_resume.txt",
+      "text": "Ananya Iyer\nEngineer with 3 years of professional experience.\n\n- Built and maintained several Python microservices over the last two years.\n- Implemented semantic search over a knowledge base and wired it into an LLM answer endpoint.\n- Wrote the metric pipeline that tracked model quality release over release.\n- Containerised our model services and deployed them to Google Cloud Run.\n- Used a graph-based orchestration framework to sequence model calls with fallbacks.\n- Maintained dbt models and the SQL transformations behind reporting.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 2,
+        "rag_systems": 2,
+        "eval_rigour": 2,
+        "serving_infra": 2,
+        "agent_orchestration": 2,
+        "data_pipelines": 2,
+        "ml_modelling": 2
+      },
+      "_seniority": "mid"
+    },
+    {
+      "id": "c29",
+      "name": "Thomas Okonkwo",
+      "filename": "thomas_okonkwo_resume.txt",
+      "text": "Thomas Okonkwo\nGraduate student; internships and coursework, no full-time industry role yet.\n\n- Used Python for coursework, notebooks, and a capstone project.\n- Followed a tutorial to build a chatbot over PDFs for a hackathon weekend.\n- Reported accuracy and F1 on a held-out split for course projects.\n- Deployed a Streamlit demo to a free hosting tier.\n- Chained several LLM calls with tool use and branching logic for an internal automation.\n- No data engineering exposure.\n- Completed several machine learning courses and Kaggle competitions.",
+      "_profile": {
+        "python_depth": 1,
+        "rag_systems": 1,
+        "eval_rigour": 1,
+        "serving_infra": 1,
+        "agent_orchestration": 2,
+        "data_pipelines": 0,
+        "ml_modelling": 1
+      },
+      "_seniority": "student"
+    },
+    {
+      "id": "c30",
+      "name": "Camille Dubois",
+      "filename": "camille_dubois_resume.txt",
+      "text": "Camille Dubois\nSenior engineer, 7 years professional experience.\n\n- Primary language for five years: async services, packaging, and CPython profiling for hot paths.\n- Owned a production question-answering system backed by semantic search; ran the chunking and reranking experiments that took answer groundedness from 0.61 to 0.88.\n- Wrote the metric pipeline that tracked model quality release over release.\n- Ran the platform's request-serving layer — containers, blue-green rollout, and latency budgets per endpoint.\n- Used a graph-based orchestration framework to sequence model calls with fallbacks.\n- Maintained dbt models and the SQL transformations behind reporting.\n- Fine-tuned transformer classifiers for document routing.",
+      "_profile": {
+        "python_depth": 3,
+        "rag_systems": 3,
+        "eval_rigour": 2,
+        "serving_infra": 3,
+        "agent_orchestration": 2,
+        "data_pipelines": 2,
+        "ml_modelling": 2
+      },
+      "_seniority": "senior"
+    }
+  ],
+  "judgements": [
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c03",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c05",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c07",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c08",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c09",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c13",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c15",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c19",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c26",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_py",
+      "candidate_id": "c30",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c03",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c05",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c07",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c08",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c09",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c13",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c15",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c19",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c26",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_rag",
+      "candidate_id": "c30",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c03",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c05",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c07",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c08",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c09",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c13",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c15",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c19",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c24",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c26",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_serve",
+      "candidate_id": "c30",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c03",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c05",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c07",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c08",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c09",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c13",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c15",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c19",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c26",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_eval",
+      "candidate_id": "c30",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c01",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c03",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c05",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c07",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c08",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c09",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c13",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c15",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c19",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c24",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c26",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ai_engineer",
+      "requirement_id": "req_agent",
+      "candidate_id": "c30",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c02",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c05",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c10",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c11",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c15",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c16",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c17",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c20",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c23",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c25",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c27",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_py",
+      "candidate_id": "c28",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c02",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c05",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c10",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c11",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c15",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c16",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c17",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c20",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c23",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c25",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c27",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_pipe",
+      "candidate_id": "c28",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c02",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c05",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c10",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c11",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c15",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c16",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c17",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c20",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c23",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c25",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c27",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_serve",
+      "candidate_id": "c28",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c02",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c05",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c10",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c11",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c15",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c16",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c17",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c20",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c23",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c25",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c27",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_model",
+      "candidate_id": "c28",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c02",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c05",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c10",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c11",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c15",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c16",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c17",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c20",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c23",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c25",
+      "relevance": 0
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c27",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_ml_platform",
+      "requirement_id": "req_rag",
+      "candidate_id": "c28",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c01",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c03",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c04",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c06",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c09",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c12",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c14",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c19",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c21",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c24",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c26",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_agent",
+      "candidate_id": "c29",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c03",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c04",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c06",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c09",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c12",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c14",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c19",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c21",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c26",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_eval",
+      "candidate_id": "c29",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c03",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c04",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c06",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c09",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c12",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c14",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c19",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c21",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c26",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_py",
+      "candidate_id": "c29",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c03",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c04",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c06",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c09",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c12",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c14",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c19",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c21",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c26",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_rag",
+      "candidate_id": "c29",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c01",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c03",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c04",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c06",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c09",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c12",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c14",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c19",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c21",
+      "relevance": 1
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c24",
+      "relevance": 3
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c26",
+      "relevance": 2
+    },
+    {
+      "role_id": "r_applied_scientist",
+      "requirement_id": "req_model",
+      "candidate_id": "c29",
+      "relevance": 1
+    }
+  ]
+}

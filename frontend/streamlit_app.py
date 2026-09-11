@@ -9,11 +9,12 @@ backend_url = st.sidebar.text_input("Backend URL", value="http://localhost:8000"
 st.title("Talentra Copilot")
 st.caption("Evidence-grounded candidate evaluation, recruiter copilot, and ATS intelligence")
 
-role_tab, candidate_tab, evaluate_tab, copilot_tab, ats_tab, ops_tab = st.tabs([
+role_tab, candidate_tab, evaluate_tab, copilot_tab, agentic_tab, ats_tab, ops_tab = st.tabs([
     "Create Role",
     "Upload Candidates",
     "Evaluate",
     "Copilot Q&A",
+    "Agentic run",
     "ATS Workflow",
     "Ops",
 ])
@@ -180,6 +181,25 @@ with copilot_tab:
                 resp.raise_for_status()
                 payload = resp.json()
                 st.write(payload["answer"])
+
+                grounding = payload.get("faithfulness")
+                if grounding:
+                    score = grounding["faithfulness"]
+                    cols = st.columns(3)
+                    cols[0].metric("Groundedness", f"{score:.2f}")
+                    cols[1].metric(
+                        "Supported sentences",
+                        f"{grounding['sentences_supported']}/{grounding['sentences_total']}",
+                    )
+                    cols[2].metric("Threshold", f"{grounding['threshold']:.2f}")
+                    if score < 0.7:
+                        st.warning(
+                            "Some sentences in this answer are not supported by the cited evidence. "
+                            "They are listed below — treat them as unverified."
+                        )
+                    for sentence in grounding.get("unsupported", []):
+                        st.markdown(f"- :red[unsupported] {sentence}")
+
                 with st.expander("Citations"):
                     for citation in payload["citations"]:
                         st.markdown(f"**{citation['entity_name']}** · {citation['filename']} · {citation['score']:.2f}")
@@ -189,6 +209,155 @@ with copilot_tab:
                         st.write(f"- {item}")
             except requests.RequestException as exc:
                 st.error(str(exc))
+
+with agentic_tab:
+    st.subheader("Agentic evaluation with a human approval gate")
+    st.caption(
+        "Runs the full graph: screen -> evaluate -> bias audit -> route -> answer. "
+        "If an ATS action is attached the run stops *before* the write and waits for you."
+    )
+    roles = get_roles()
+    candidates = get_candidates()
+    role_options = {f"{role['title']} ({role['id']})": role["id"] for role in roles}
+    candidate_options = {f"{candidate['name']} ({candidate['id']})": candidate["id"] for candidate in candidates}
+
+    selected_role_label = st.selectbox(
+        "Role", options=list(role_options.keys()), key="agentic-role"
+    ) if role_options else None
+    chosen = st.multiselect(
+        "Candidates (all if empty)", options=list(candidate_options.keys()), key="agentic-candidates"
+    ) if candidate_options else []
+    agentic_question = st.text_input("Question (optional)", key="agentic-question")
+
+    st.markdown("**Proposed ATS action** (leave the candidate blank to run without one)")
+    action_cols = st.columns(3)
+    action_candidate = action_cols[0].selectbox(
+        "Candidate", options=["(none)"] + list(candidate_options.keys()), key="agentic-action-candidate"
+    )
+    action_stage = action_cols[1].selectbox(
+        "Stage", options=["Screening", "Shortlisted", "Interview", "Final", "Rejected"], key="agentic-action-stage"
+    )
+    action_note = action_cols[2].text_input("Note", key="agentic-action-note")
+
+    if st.button("Run agentic evaluation"):
+        if not selected_role_label:
+            st.warning("Create a role first.")
+        else:
+            body = {
+                "candidate_ids": [candidate_options[label] for label in chosen],
+                "question": agentic_question or None,
+                "run_bias_audit": True,
+            }
+            if action_candidate != "(none)":
+                body["ats_action"] = {
+                    "candidate_id": candidate_options[action_candidate],
+                    "stage": action_stage,
+                    "note": action_note or None,
+                }
+            try:
+                resp = requests.post(
+                    f"{backend_url}/roles/{role_options[selected_role_label]}/evaluate/agentic",
+                    json=body,
+                    timeout=300,
+                )
+                resp.raise_for_status()
+                st.session_state["agentic_run"] = resp.json()
+            except requests.RequestException as exc:
+                st.error(str(exc))
+
+    run = st.session_state.get("agentic_run")
+    if run:
+        st.code(" -> ".join(run["nodes_executed"]), language=None)
+        if run.get("errors"):
+            st.error("; ".join(run["errors"]))
+
+        if run.get("screening"):
+            st.markdown("**Screening**")
+            st.dataframe(
+                [
+                    {
+                        "Candidate": item["candidate_name"],
+                        "Passed": item["screen_pass"],
+                        "Failed must-haves": ", ".join(item["fail_reasons"]) or "-",
+                    }
+                    for item in run["screening"]
+                ],
+                use_container_width=True,
+            )
+
+        if run.get("evaluation"):
+            st.markdown("**Ranking**")
+            st.dataframe(
+                [
+                    {
+                        "Candidate": item["candidate_name"],
+                        "Score": round(item["overall_score"], 3),
+                        "Matched": item["matched_requirements"],
+                        "Missing": item["missing_requirements"],
+                    }
+                    for item in run["evaluation"]["candidates"]
+                ],
+                use_container_width=True,
+            )
+
+        audit = run.get("bias_audit")
+        if audit:
+            st.markdown("**Bias audit** (counterfactual redaction; no demographic inference)")
+            cols = st.columns(2)
+            cols[0].metric("Severity", audit["severity"])
+            cols[1].metric("Largest score shift", audit["max_abs_delta"])
+            if audit["deltas"]:
+                st.dataframe(
+                    [
+                        {
+                            "Candidate": d["candidate_name"],
+                            "Signal removed": d["signal"],
+                            "Baseline": d["baseline_score"],
+                            "Redacted": d["redacted_score"],
+                            "Delta": d["delta"],
+                        }
+                        for d in audit["deltas"]
+                    ],
+                    use_container_width=True,
+                )
+            for flag in audit["flags"]:
+                st.warning(flag)
+            st.caption(audit["recommendation"])
+
+        if run.get("answer"):
+            st.markdown("**Answer**")
+            st.write(run["answer"]["answer"])
+            grounding = run["answer"].get("faithfulness")
+            if grounding:
+                st.caption(
+                    f"Groundedness {grounding['faithfulness']:.2f} "
+                    f"({grounding['sentences_supported']}/{grounding['sentences_total']} sentences "
+                    f"supported by the cited evidence)"
+                )
+
+        if run.get("interrupted_before"):
+            st.error(
+                f"Paused before `{run['interrupted_before']}`. "
+                "Nothing has been written to the ATS. Your decision is required."
+            )
+            st.json(run["pending_ats_action"])
+            approve_col, decline_col = st.columns(2)
+            if approve_col.button("Approve and commit", type="primary"):
+                out = requests.post(
+                    f"{backend_url}/agentic/runs/{run['run_id']}/resume",
+                    json={"run_id": run["run_id"], "approve": True},
+                    timeout=60,
+                ).json()
+                st.success(out["message"]) if out["ats_committed"] else st.warning(out["message"])
+                st.session_state.pop("agentic_run", None)
+            if decline_col.button("Decline"):
+                out = requests.post(
+                    f"{backend_url}/agentic/runs/{run['run_id']}/resume",
+                    json={"run_id": run["run_id"], "approve": False},
+                    timeout=60,
+                ).json()
+                st.info(out["message"])
+                st.session_state.pop("agentic_run", None)
 
 with ats_tab:
     st.subheader("ATS workflow and recruiter ops")

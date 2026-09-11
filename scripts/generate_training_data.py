@@ -17,7 +17,7 @@ from pathlib import Path
 # Ensure app is importable when run from repo root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.finetuning.data_generator import generate_training_data, export_jsonl
+from app.finetuning.data_generator import export_jsonl, generate_training_data
 
 
 def main():

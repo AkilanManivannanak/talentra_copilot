@@ -12,7 +12,7 @@ from app.models.schemas import (
 )
 from app.routers.deps import get_services
 from app.services.container import ServiceContainer
-from app.services.document_parser import DocumentParseError, SUPPORTED_EXTENSIONS, extract_text
+from app.services.document_parser import SUPPORTED_EXTENSIONS, DocumentParseError, extract_text
 
 router = APIRouter(tags=["candidates"])
 logger = logging.getLogger(__name__)

@@ -1,27 +1,87 @@
 {
-  "benchmark_context": "in-process FastAPI TestClient on local CPU with no external API calls",
-  "slo_targets": {
-    "evaluate_p95_ms": 1500,
-    "copilot_p95_ms": 1500,
-    "external_cost_usd_per_request": 0.0
+  "context": {
+    "harness": "in-process FastAPI TestClient; no network hop, no concurrency",
+    "retrieval_mode": "hybrid",
+    "dense_backend": "lsa",
+    "candidates_indexed": 12,
+    "requirements": 4,
+    "iterations_per_measurement": 200,
+    "caveat": "These are local latency measurements, not SLOs. An SLO is a commitment about production traffic under concurrency; this process serves one request at a time on one machine against a synthetic corpus."
   },
   "latency_ms": {
-    "role_create_p95": 7.14,
-    "candidate_upload_p95": 8.42,
-    "evaluate_p95": 3.1,
-    "copilot_p95": 2.97
+    "role_create": {
+      "n": 1,
+      "mean": 6.546,
+      "p50": 6.546,
+      "p95": 6.546,
+      "p99": 6.546,
+      "max": 6.546
+    },
+    "candidate_upload_batch": {
+      "n": 1,
+      "mean": 2229.841,
+      "p50": 2229.841,
+      "p95": 2229.841,
+      "p99": 2229.841,
+      "max": 2229.841
+    },
+    "evaluate_cold": {
+      "n": 200,
+      "mean": 10.955,
+      "p50": 9.943,
+      "p95": 12.498,
+      "p99": 29.153,
+      "max": 105.159
+    },
+    "evaluate_warm_cache_hit": {
+      "n": 200,
+      "mean": 4.534,
+      "p50": 4.539,
+      "p95": 4.772,
+      "p99": 4.927,
+      "max": 5.685
+    },
+    "copilot_cold": {
+      "n": 200,
+      "mean": 12.737,
+      "p50": 11.204,
+      "p95": 17.096,
+      "p99": 37.749,
+      "max": 186.621
+    },
+    "copilot_warm_cache_hit": {
+      "n": 200,
+      "mean": 6.118,
+      "p50": 6.045,
+      "p95": 6.692,
+      "p99": 7.205,
+      "max": 9.159
+    }
   },
-  "quality": {
-    "top1_eval_accuracy": 1.0,
-    "copilot_ranking_consistency": 1.0,
-    "candidate_count": 3,
-    "requirements_per_role": 8
+  "cache": {
+    "evaluate_p95_speedup_x": 2.6,
+    "note": "Warm figures are cache hits and should never be quoted as request latency. The previously published 4.81 ms evaluate p95 was a warm number."
+  },
+  "cold_start_ms": {
+    "preprocessing_model_warmup_total": 41766.1,
+    "spacy_ms": 4163.8,
+    "presidio_ms": 37602.2,
+    "note": "Paid once per process, on a background thread at startup. Reported separately because it is a boot cost, not a request cost."
   },
   "cost": {
     "external_api_cost_usd_per_request": 0.0,
-    "hosting_note": "Excludes infrastructure hosting cost; local CPU benchmark only."
+    "note": "All models run in-process on CPU. Excludes infrastructure hosting cost."
   },
-  "ops_metrics_snapshot": {
-    "metrics": {}
+  "sanity": {
+    "candidates_ranked": 12,
+    "top_candidate": "Elena Petrova",
+    "answer_grounded": 0.3333,
+    "ops_metrics_populated": true
+  },
+  "thresholds": {
+    "evaluate_cold_p95_ms": 2000,
+    "copilot_cold_p95_ms": 2000,
+    "upload_p95_ms": 3000,
+    "role_create_p95_ms": 500
   }
 }
