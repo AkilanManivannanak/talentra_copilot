@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from collections.abc import Sequence
 from statistics import mean
-from typing import Sequence
 
 from app.models.schemas import CopilotAnswerResponse, Evidence, RequirementAssessment, RoleRecord
 
 
 class SummaryService:
-    def __init__(self, *, chat_model: str, openai_api_key: str) -> None:
+    def __init__(self, *, chat_model: str = "local-rule-based", openai_api_key: str = "") -> None:
         self._mode = "local"
 
     def candidate_summary(self, *, role: RoleRecord, candidate_name: str, assessments: Sequence[RequirementAssessment]) -> str:
